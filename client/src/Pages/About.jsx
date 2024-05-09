@@ -12,7 +12,7 @@ function AboutPage() {
         />
         <div className="flex justify-around items-center h-[84vh]">
           <h2 className="text-2xl">Who we are</h2>
-          <h5 className="text-xl w-1/2 text-left">
+          <h5 className="text-xl w-1/2 text-left bg-gradient-to-br bg-clip-text text-transparent from-white via-white to-white/30">
             At DineSync, we've curated a unique blend of convenience and
             culinary delight. From hassle-free table reservations to effortless
             food ordering, our app ensures you savor every moment. Discover a

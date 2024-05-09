@@ -37,8 +37,18 @@ const getAvailableTables = async (req, res, next) => {
  */
 const reserveTable = async (req, res, next) => {
   console.log("Reservation Submitted");
+  //? request body
+  const {
+    table: selectedTable,
+    date: selectedDateTime,
+    name,
+    phone,
+    email,
+  } = req.body;
+  //? request query
+  const { userId } = req.query;
+
   try {
-    const selectedDateTime = req.body.date;
     // 1. Find all days matching the requested date:
     const days = await Day.find({ date: selectedDateTime });
 
@@ -52,16 +62,16 @@ const reserveTable = async (req, res, next) => {
        *  it's common in web apps to send the unique identifier (ID) of an entity as part of the request body when performing operations like creating, updating, or deleting.
        * customer chooses a table -> sending its id/ number to backend.
        */
-      const table = day.tables.find((table) => table.number === req.body.table);
+      const table = day.tables.find((table) => table.number === selectedTable);
 
       // 4. Check if the requested table exists within the day:
       if (table) {
         // 5. Table found: Create a new reservation object:
         table.reservation = new Reservation({
-          name: req.body.name,
-          phone: req.body.phone,
-          email: req.body.email,
-          userId: req.query.userId,
+          name,
+          phone,
+          email,
+          userId,
         });
 
         // 6. Mark the table as unavailable:
@@ -87,14 +97,17 @@ const reserveTable = async (req, res, next) => {
 const getMyOrders = async (req, res, next) => {
   try {
     const days = await Day.find({});
-    const reservedTables = []
+    const reservedTables = [];
     // Iterate over each day
     days.forEach((day) => {
       // Iterate over each table in the day
       day.tables.forEach((table) => {
         //? Check if the table is reserved by the logged in user , whose id is passed as query.
-        if (table.reservation && table.reservation.userId === req.query.userId) {
-          const { name, phone, email  } = table.reservation;
+        if (
+          table.reservation &&
+          table.reservation.userId === req.query.userId
+        ) {
+          const { name, phone, email } = table.reservation;
           reservedTables.push({
             reservedDate: day.date, // date and time the table is reserved for
             number: table.number, // the table
@@ -104,7 +117,7 @@ const getMyOrders = async (req, res, next) => {
             // table.reservation properties
             bookerName: name,
             bookerPhone: phone,
-            bookerEmail: email
+            bookerEmail: email,
           });
         }
       });

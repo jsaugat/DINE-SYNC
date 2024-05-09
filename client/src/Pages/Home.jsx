@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 // Aceternity
 import { cn } from "@/utils/cn";
 import { Spotlight } from "@/components/ui/Spotlight";
+import { ArrowRight } from "lucide-react";
 
 function HomePage() {
   const navigate = useNavigate();
@@ -15,49 +16,6 @@ function HomePage() {
   // const lastSectionStyle = "top-[95.7px] h-[80vh] w-full rounded-[30px]";
   return (
     <>
-      {/* BLOB */}
-      {/* <svg
-        className="absolute z-[-1] -left-[35rem] "
-        width="1200"
-        height="1200"
-        viewBox="0 0 1268 938"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <g filter="url(#filter0_f_32_221)">
-          <ellipse
-            cx="633.976"
-            cy="468.732"
-            rx="320.234"
-            ry="115.739"
-            transform="rotate(-16.669 633.976 468.732)"
-            fill="green"
-          />
-        </g>
-        <defs>
-          <filter
-            id="filter0_f_32_221"
-            x="0.781647"
-            y="0.145538"
-            width="1266.39"
-            height="937.173"
-            filterUnits="userSpaceOnUse"
-            color-interpolation-filters="sRGB"
-          >
-            <feFlood flood-opacity="0" result="BackgroundImageFix" />
-            <feBlend
-              mode="normal"
-              in="SourceGraphic"
-              in2="BackgroundImageFix"
-              result="shape"
-            />
-            <feGaussianBlur
-              stdDeviation="162.3"
-              result="effect1_foregroundBlur_32_221"
-            />
-          </filter>
-        </defs>
-    </svg> */}
       <Container className="relative space-y-5 ">
         <Spotlight
           className="-top-40 left-0 md:left-60 md:-top-20"
@@ -70,7 +28,9 @@ function HomePage() {
           <div className="absolute top-10 z-10 w-[56.25rem] text-7xl text-left leading-none pointer-events-none font-montreal tracking-tight bg-gradient-to-r from-white via-white to-white inline-block text-transparent bg-clip-text">
             <span>ELEVATE YOUR </span>
             <br />
-            <span className="text-right w-full inline-block">DINING EXPERIENCE</span>
+            <span className="text-right w-full inline-block">
+              DINING EXPERIENCE
+            </span>
           </div>
           {/* Hero Image z-none */}
           <figure className="bg-hero-image z-50 h-[25rem] w-[37.5rem] mt-44 mb-16 bg-cover bg-left"></figure>
@@ -82,80 +42,104 @@ function HomePage() {
             </p>
             {/* RESERVE A TABLE CTA */}
             <div
-              className="flex items-center gap-2 cursor-pointer"
+              className="group h-16 w-fit flex items-center gap-2 cursor-pointer"
               onClick={() => navigate("/booking")}
             >
-              {/* arrowball */}
-              {/* transparend svg */}
-              {/* <svg
-                width="50"
-                height="50"
-                viewBox="0 0 50 50"
-                fill="white"
-                xmlns="http://www.w3.org/2000/svg"
-                className="reserve-arrow-svg"
-              >
-                <circle cx="25" cy="25" r="24.5" stroke="#F1F1F1" />
-                <g className="arrow-group">
-                  <path
-                    d="M14 25H36"
-                    stroke="black"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M25 14L36 25L25 36"
-                    stroke="black"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </g>
-              </svg> */}
-              {/* bg-white svg */}
-              {/* <svg
-                width="50"
-                height="50"
-                viewBox="0 0 50 50"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="border border-gray-600 rounded-full"
-              >
-                <circle cx="25" cy="25" r="25" fill="" />
-                <path
-                  d="M14 25H36"
-                  stroke="white"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M25 14L36 25L25 36"
-                  stroke="white"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg> */}
               {/* //? Moving Border Button */}
               <Button
                 borderRadius="10rem"
                 className={
-                  "text-[1.1rem] bg-transparent transition-colors ease-in-out delay-150 border-onyx/50"
+                  "text-[1.1rem] bg-transparent transition-colors ease-in-out duration-300 border-onyx/50"
                   // hover:bg-gradient-to-l hover:from-teal-950 hover:to-black
                 }
                 duration={"6000"}
               >
                 Reserve A Table
               </Button>
+              <ArrowBall
+                className=""
+                arrowStyles="group-hover:translate-x-14 transition-all ease-out duration-300"
+              />
             </div>
           </div>
         </section>
-        <section
+        {/* <section
           className={`bg-zinc-900 ${sectionStyle} h-screen w-[80%] mx-auto my-96`}
-        ></section>
+        ></section> */}
       </Container>
     </>
   );
 }
 
 export default HomePage;
+
+const ArrowBall = ({ className, arrowStyles }) => (
+  <div
+    className={cn(
+      "rounded-full h-12 w-[4.5rem] border overflow-hidden flex items-center justify-center",
+      className
+    )}
+  >
+    <div
+      className={`${arrowStyles} relative h-full w-full rounded-full flex items-center justify-end`}
+    >
+      <ArrowRight
+        strokeWidth="1.2px"
+        size={"35px"}
+        className="absolute -left-14 w-[4.5rem] "
+      />
+      <ArrowRight
+        strokeWidth="1.2px"
+        size={"35px"}
+        className="absolute w-[4.5rem] "
+      />
+    </div>
+  </div>
+);
+
+// function Blob() {
+//   return (
+//     <svg
+//       className="absolute z-[-1] -left-[35rem] "
+//       width="1200"
+//       height="1200"
+//       viewBox="0 0 1268 938"
+//       fill="none"
+//       xmlns="http://www.w3.org/2000/svg"
+//     >
+//       <g filter="url(#filter0_f_32_221)">
+//         <ellipse
+//           cx="633.976"
+//           cy="468.732"
+//           rx="320.234"
+//           ry="115.739"
+//           transform="rotate(-16.669 633.976 468.732)"
+//           fill="green"
+//         />
+//       </g>
+//       <defs>
+//         <filter
+//           id="filter0_f_32_221"
+//           x="0.781647"
+//           y="0.145538"
+//           width="1266.39"
+//           height="937.173"
+//           filterUnits="userSpaceOnUse"
+//           color-interpolation-filters="sRGB"
+//         >
+//           <feFlood flood-opacity="0" result="BackgroundImageFix" />
+//           <feBlend
+//             mode="normal"
+//             in="SourceGraphic"
+//             in2="BackgroundImageFix"
+//             result="shape"
+//           />
+//           <feGaussianBlur
+//             stdDeviation="162.3"
+//             result="effect1_foregroundBlur_32_221"
+//           />
+//         </filter>
+//       </defs>
+//     </svg>
+//   );
+// }

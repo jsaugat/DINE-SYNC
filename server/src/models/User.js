@@ -49,9 +49,9 @@ userSchema.methods.passwordMatches = async function (enteredPassword) {
 };
 
 //? Define middleware to update user's reservations after a reservation is made
-userSchema.post('save', async function(doc, next) {
+userSchema.post("save", async function (doc, next) {
   try {
-    const reservations = await Reservation.findById({ userId: doc._id });
+    const reservations = await Reservation.find({ userId: doc._id });
     doc.reservations = reservations;
     doc.save();
     next();

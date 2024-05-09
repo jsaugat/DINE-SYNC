@@ -51,7 +51,7 @@ const NavBar = () => {
             About us
           </NavLink>
         </li>
-        <li>
+        {/* <li>
           <NavLink
             to="menu"
             className={({ isActive }) =>
@@ -60,7 +60,7 @@ const NavBar = () => {
           >
             The Menu
           </NavLink>
-        </li>
+        </li> */}
         <li>
           <NavLink
             to="booking"

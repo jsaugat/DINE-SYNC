@@ -115,4 +115,3 @@ export {
  * Side-Note :
  * Using user.password = password || user.password would set the user's password to user.password if password is falsy (empty or not provided), potentially leading to undesired behavior. By checking explicitly with if (password), you ensure that the password is only updated when a new non-empty password is provided in the request.
  */
-
