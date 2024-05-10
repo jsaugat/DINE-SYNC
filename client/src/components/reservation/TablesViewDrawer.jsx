@@ -26,11 +26,11 @@ export default function TablesViewDrawer({ onlyIcon, className }) {
       {/* <button className={`${onlyIcon === true ? " " : "" }`}> */}
       <DrawerTrigger>
         <Button
-          variant="minimal"
-          className={`w-full text-sm rounded-full  ${
-            onlyIcon ?
-            "fixed top-0 -right-16 z-50 aspect-square size-12"
-            : "py-5"
+          variant="outline"
+          className={`border w-full text-sm rounded-full  ${
+            onlyIcon
+              ? "fixed top-0 -right-16 z-50 aspect-square size-12"
+              : "py-5"
           } ${className} `}
           size="sm"
         >

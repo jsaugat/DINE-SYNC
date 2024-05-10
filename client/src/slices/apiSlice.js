@@ -8,7 +8,7 @@
 
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const baseQuery = fetchBaseQuery({ baseUrl: "http://localhost:6900" }); // it's empty cause we used proxy in vite.config.js
+const baseQuery = fetchBaseQuery({ baseUrl: "http://localhost:6900/api" }); // it's empty cause we used proxy in vite.config.js
 
 export const apiSlice = createApi({
   baseQuery,

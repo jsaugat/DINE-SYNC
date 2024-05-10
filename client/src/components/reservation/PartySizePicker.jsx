@@ -1,3 +1,40 @@
+import React, { useState } from "react";
+import { setSize } from "@/slices/reservation/selectionSlice";
+import { useSelector, useDispatch } from "react-redux";
+
+function PartySizePicker() {
+  const selectedSize = useSelector((state) => state.selection.size);
+  const dispatch = useDispatch();
+  return (
+    <>
+      <label className="text-[0.9rem] text-googleBlue mt-4">
+        Select a Party Size
+      </label>
+      <section className="flex justify-center gap-5 border border-neutral-800 p-2 rounded-full mt-2 w-fit">
+        {[2, 4, 6, 8].map((option) => (
+          <button
+            key={option}
+            onClick={() => dispatch(setSize(option))}
+            className={`${
+              selectedSize === option
+                ? "bg-antiFlash hover:bg-white text-black"
+                : null
+            } rounded-full size-5 border border-onyx cursor-pointer hover:bg-neutral-800 flex items-center justify-center p-5 flex-1`}
+          >
+            {option}
+          </button>
+        ))}
+      </section>
+      {/* <div className='rounded-full size-5 border border-onyx cursor-pointer hover:bg-neutral-800 flex items-center justify-center p-5 flex-1'>2</div>
+      <div className='rounded-full size-5 border border-onyx cursor-pointer hover:bg-neutral-800 flex items-center justify-center p-5 flex-1'>4</div>
+      <div className='rounded-full size-5 border border-onyx cursor-pointer hover:bg-neutral-800 flex items-center justify-center p-5 flex-1'>6</div>
+      <div className='rounded-full size-5 border border-onyx cursor-pointer hover:bg-neutral-800 flex items-center justify-center p-5 flex-1'>8</div> */}
+    </>
+  );
+}
+
+export default PartySizePicker;
+
 // import React, { useEffect, useRef, useState } from "react";
 // import { Slider } from "@/shadcn/ui/slider";
 // import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
@@ -91,40 +128,3 @@
 //     </main>
 //   );
 // }
-
-import React, { useState } from "react";
-import { setSize } from "@/slices/reservation/selectionSlice";
-import { useSelector, useDispatch } from "react-redux";
-
-function PartySizePicker() {
-  const selectedSize = useSelector((state) => state.selection.size);
-  const dispatch = useDispatch();
-  return (
-    <>
-      <label className="text-[0.9rem] text-googleBlue mt-4">
-        Select a Party Size
-      </label>
-      <section className="flex justify-center gap-5 border border-neutral-800 p-2 rounded-full mt-2 w-fit">
-        {[2, 4, 6, 8].map((option) => (
-          <button
-            key={option}
-            onClick={() => dispatch(setSize(option))}
-            className={`${
-              selectedSize === option
-                ? "bg-antiFlash hover:bg-white text-black"
-                : null
-            } rounded-full size-5 border border-onyx cursor-pointer hover:bg-neutral-800 flex items-center justify-center p-5 flex-1`}
-          >
-            {option}
-          </button>
-        ))}
-      </section>
-      {/* <div className='rounded-full size-5 border border-onyx cursor-pointer hover:bg-neutral-800 flex items-center justify-center p-5 flex-1'>2</div>
-      <div className='rounded-full size-5 border border-onyx cursor-pointer hover:bg-neutral-800 flex items-center justify-center p-5 flex-1'>4</div>
-      <div className='rounded-full size-5 border border-onyx cursor-pointer hover:bg-neutral-800 flex items-center justify-center p-5 flex-1'>6</div>
-      <div className='rounded-full size-5 border border-onyx cursor-pointer hover:bg-neutral-800 flex items-center justify-center p-5 flex-1'>8</div> */}
-    </>
-  );
-}
-
-export default PartySizePicker;

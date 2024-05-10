@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/shadcn/ui/input";
@@ -14,18 +14,22 @@ import {
   setBookingEmail,
   setBookingPhone,
   resetBooking,
-} from "@/slices/reservation/reservationSlice";
+} from "@/slices/reservation/bookingDetailsSlice";
 
 function BookingDetails({ getFormattedDateTime }) {
   // RTK slices
-  const { name, phone, email } = useSelector((state) => state.reservation);
-  const userId = useSelector(state => state.auth.userInfo._id);
+  const { name, phone, email } = useSelector((state) => state.bookingDetails);
+  const userId = useSelector((state) => state.auth.userInfo._id);
   const {
     table: { number: tableNumber },
+    size,
   } = useSelector((state) => state.selection);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    console.log("reserdetails: ", tableNumber, size);
+  }, []);
   // Make a reservation request to the backend api.
   const makeReservationRequest = async () => {
     const incompleteDetails =
@@ -46,7 +50,7 @@ function BookingDetails({ getFormattedDateTime }) {
       try {
         // Send a POST request to reserve the table
         const response = await fetch(
-          `http://localhost:6900/api/tables/reservation?userId=${userId}`,
+          `http://localhost:6900/api/reservation?userId=${userId}`,
           {
             method: "POST",
             headers: {
@@ -58,6 +62,7 @@ function BookingDetails({ getFormattedDateTime }) {
               email,
               date: selectedDateTime,
               table: tableNumber,
+              capacity: size,
             }),
           }
         );
@@ -93,8 +98,9 @@ function BookingDetails({ getFormattedDateTime }) {
             <span className=" my-1 flex items-center gap-2 mx-auto">
               <Check />
               <span>
-                Table <span className="text-googleBlue">T-{tableNumber}</span> is
-                selected.
+                Table{" "}
+                <span className="text-googleBlue text-xl">T-{tableNumber}</span>{" "}
+                is selected.
               </span>
             </span>
             <Separator />

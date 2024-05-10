@@ -2,7 +2,7 @@ import asyncHandler from "express-async-handler";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
-export const shield = asyncHandler(async function (req, res, next) {
+export const validateToken = asyncHandler(async function (req, res, next) {
   let token = req.cookies.jwt;
   // if missing token
   if (!token) {
@@ -10,7 +10,7 @@ export const shield = asyncHandler(async function (req, res, next) {
   } else {
     try {
       /**
-       * @function 'decodedPayload' - 
+       * @function 'decodedPayload' -
        * if token is valid   @returns an object representing the 'decoded payload of the JWT'
        * if token is invalid @throws  an error that's why wrapped in try-catch block
        */

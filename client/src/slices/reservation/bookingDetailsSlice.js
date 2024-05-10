@@ -3,11 +3,11 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   name: "",
   phone: "",
-  email: ""
+  email: "",
 };
 
-const reservationSlice = createSlice({
-  name: "reservation",
+const bookingDetailsSlice = createSlice({
+  name: "bookingDetails",
   initialState,
   reducers: {
     setBookingName: (state, action) => {
@@ -19,16 +19,16 @@ const reservationSlice = createSlice({
     setBookingEmail: (state, action) => {
       state.email = action.payload;
     },
-    resetBooking: state => {
+    resetBooking: (state) => {
       return initialBookingState;
-    }
-  }
+    },
+  },
 });
 
 export const {
   setBookingName,
   setBookingPhone,
   setBookingEmail,
-  resetBooking
-} = reservationSlice.actions;
-export default reservationSlice.reducer;
+  resetBooking,
+} = bookingDetailsSlice.actions;
+export default bookingDetailsSlice.reducer;

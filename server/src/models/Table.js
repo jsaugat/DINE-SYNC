@@ -1,15 +1,14 @@
 import mongoose from "mongoose";
-import { Schema } from "mongoose";
-import { reservationSchema } from "./Reservation.js";
 
-export const tableSchema = new Schema(
+export const tableSchema = new mongoose.Schema(
   {
     number: Number,
     capacity: Number,
     isAvailable: Boolean,
     reservation: {
-      required: false, 
-      type: reservationSchema,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Reservation",
+      required: false,
     },
   },
   { timestamps: true }

@@ -6,17 +6,14 @@ import {
   updateTable,
   deleteTable,
 } from "../controllers/table.controller.js";
-import { getAvailableTables, reserveTable, getMyOrders } from "../controllers/table.controller.js";
+import { getAvailableTables } from "../controllers/table.controller.js";
 // import { verifyAdmin } from "../utils/verifyToken.js";
 
 const router = express.Router();
 
 // AVAILABLE TABLES
-router.post("/availability", getAvailableTables);
-// RESERVAION
-router.post("/reservation", reserveTable);
-// MY ORDERS
-router.get("/myorders", getMyOrders);
+router.post("/", getAvailableTables);
+
 // //CREATE
 // router.post("/", verifyAdmin, createTable);
 // //UPDATE, with id

@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { setTable } from "@/slices/reservation/selectionSlice";
+import { setSize } from "@/slices/reservation/selectionSlice";
 import { setTotalTables } from "@/slices/reservation/totalTablesSlice";
 import { useEffect, useState } from "react";
 // styles
@@ -17,22 +18,19 @@ import {
   TableRow,
 } from "@/shadcn/ui/table";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-
+import { useToast } from "@/shadcn/ui/use-toast";
 
 export default function Tables({ search, getFormattedDateTime }) {
+  // selected details
   let {
     date: selectedDate,
     time: selectedTime,
     size: selectedSize,
-    table: { number: tableNumber },
+    table: { number: selectedTableNumber },
   } = useSelector((state) => state.selection);
   const totalTables = useSelector((state) => state.totalTables);
   const dispatch = useDispatch();
-
-  /**
-   * @function getFormattedDateTime
-   * @desc Format together the date and time selected by the user.
-   */
+  const { toast } = useToast();
 
   useEffect(() => {
     /**
@@ -45,18 +43,15 @@ export default function Tables({ search, getFormattedDateTime }) {
       const selectedDateTime = getFormattedDateTime();
 
       try {
-        const response = await fetch(
-          "http://localhost:6900/api/tables/availability",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              date: selectedDateTime,
-            }),
-          }
-        );
+        const response = await fetch("http://localhost:6900/api/tables", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            date: selectedDateTime,
+          }),
+        });
         // in response we get first doc from Day collection whose structure is { date: ..., tables : [tableSchema]}, tables is an array. now,
         if (response.ok) {
           console.log("Tables fetched successfully");
@@ -97,6 +92,7 @@ export default function Tables({ search, getFormattedDateTime }) {
               <TableHead className="text-center">Capacity</TableHead>
             </TableRow>
           </TableHeader>
+          {/* //? Table Details Body */}
           <TableBody>
             {totalTables?.map((table) => (
               <TableRow
@@ -104,8 +100,19 @@ export default function Tables({ search, getFormattedDateTime }) {
                 className={`cursor-pointer ${
                   table.isAvailable ? "" : "text-neutral-500 hover:bg-black"
                 }`}
-                onClick={() => dispatch(setTable(table.number))}
+                onClick={() => {
+                  if (!table.isAvailable) {
+                    toast({
+                      variant: "destructive",
+                      title: "Please select an availble table!!",
+                    });
+                    return;
+                  }
+                  dispatch(setTable(table.number));
+                  dispatch(setSize(table.capacity));
+                }}
               >
+                {/* Table Status Cell */}
                 <TableCell className="text-center">
                   {table.isAvailable ? (
                     <div
@@ -123,25 +130,34 @@ export default function Tables({ search, getFormattedDateTime }) {
                     </div>
                   )}
                 </TableCell>
+                {/* Table Number Cell */}
                 <TableCell className="font-medium text-center">
                   <span>T-{table.number}</span>
                 </TableCell>
+                {/* Capacity Cell */}
                 <TableCell className="text-center">{table.capacity}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </ScrollArea>
+
         <TableFooter>
           <TableRow>
             <TableCell colSpan={3} className="text-white bg-transparent py-3">
               {totalTables.length ? (
-                tableNumber ? (
-                  <span className="flex gap-2 justify-center">
+                selectedTableNumber ? (
+                  <span className="flex gap-2 justify-center items-center">
                     <CheckCircleIcon
                       fontSize="small"
                       className="rounded-full size-0"
                     />{" "}
-                    <span>Table <span className="text-googleBlue">T-{tableNumber}</span> is selected.</span>
+                    <span>
+                      Table{" "}
+                      <span className="text-googleBlue text-xl">
+                        T-{selectedTableNumber}
+                      </span>{" "}
+                      is selected.
+                    </span>
                   </span>
                 ) : (
                   <span>Please Select a Table</span>

@@ -22,7 +22,7 @@ export default function DatePicker() {
         <Button
           variant={"minimal"}
           className={cn(
-            "w-full justify-start text-left font-normal bg-transparent",
+            "border w-full justify-start text-left font-normal bg-transparent",
             !date && "text-muted-foreground"
           )}
         >

@@ -8,6 +8,7 @@ import {
   errorHandler,
 } from "./middlewares/error.middleware.js";
 import tablesRoute from "./routes/tables.js";
+import reservationRoute from "./routes/reservation.js";
 
 dotenv.config(); // can use process.env now
 const port = process.env.PORT || 6900;
@@ -29,6 +30,7 @@ app.use("/", (req, res, next) => {
 //? ROUTES middlewares
 app.use("/api/auth", authRoute);
 app.use("/api/tables", tablesRoute);
+app.use("/api/reservation", reservationRoute);
 // app.use("/api/users", usersRoute);
 
 //! 404 and error handler middlewares
