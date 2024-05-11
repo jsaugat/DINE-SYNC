@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import "../Styles/App.scss";
 import { Spotlight } from "@/components/ui/Spotlight";
 import Tables from "@/components/reservation/tablesList/Tables";
+import { DateToUTCDate } from "@/utils/toUTCDate";
 
 function ReservationPage() {
   const [search, setSearch] = useState(false);
@@ -47,8 +48,9 @@ function ReservationPage() {
     const formattedTime = `${hours.toString().padStart(2, "0")}:00`;
 
     const selectedDateTime = new Date(`${formattedDate} ${formattedTime}`);
-    console.log("Selected Date Time: ", selectedDateTime);
-    return selectedDateTime;
+    const selectedNepaliDateTime = DateToUTCDate(selectedDateTime);
+    console.log("Selected Nepali Date Time: ", selectedNepaliDateTime);
+    return selectedNepaliDateTime;
   };
   return (
     <Container className="relative">

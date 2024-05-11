@@ -2,6 +2,7 @@ import BookingDetails from "../models/BookingDetails.js";
 import Day from "../models/Day.js";
 import Reservation from "../models/Reservation.js";
 import Table from "../models/Table.js";
+import User from "../models/User.js";
 
 /**
  *  reservation @param { name, phone, email, date, tableNumber, capacity }
@@ -10,19 +11,20 @@ import Table from "../models/Table.js";
 // RESERVE
 const reserveTable = async (req, res, next) => {
   console.log("Reservation Submitted");
+  // Booking details
   const {
     table: selectedTableNumber,
+    capacity: selectedTableCapacity,
     date: selectedDateTime,
     name,
     phone,
     email,
-    capacity: tableCapacity,
   } = req.body;
   const { userId } = req.query;
 
   try {
-    let day;
     const days = await Day.find({ date: selectedDateTime });
+    let day;
 
     if (days.length > 0) {
       day = days[0];
@@ -40,11 +42,19 @@ const reserveTable = async (req, res, next) => {
     // Found
     if (existingTable) {
       const table = existingTable;
+      // const table = await Table.create({
+      //   number: existingTable.number,
+      //   capacity: existingTable.capacity,
+      //   isAvailable: existingTable.isAvailable,
+      // });
       if (table.isAvailable) {
+        table.isAvailable = false;
         const bookingDetails = await BookingDetails.create({
           name,
           phone,
           email,
+          tableNumber: selectedTableNumber,
+          tableCapacity: selectedTableCapacity,
         });
         const reservation = await Reservation.create({
           userId,
@@ -53,8 +63,8 @@ const reserveTable = async (req, res, next) => {
           date: selectedDateTime,
         });
         table.reservation = reservation._id;
-        table.isAvailable = false;
         await day.save();
+        // await table.save();
         console.log("Reserved");
         res.status(200).send("Added Reservation");
       } else {
@@ -64,14 +74,17 @@ const reserveTable = async (req, res, next) => {
     } else {
       const newTable = await Table.create({
         number: selectedTableNumber,
-        capacity: tableCapacity,
-        isAvailable: true,
+        capacity: selectedTableCapacity,
+        isAvailable: false,
+        reservation: null,
       });
 
       const bookingDetails = await BookingDetails.create({
         name,
         phone,
         email,
+        tableNumber: selectedTableNumber,
+        tableCapacity: selectedTableCapacity,
       });
 
       const reservation = await Reservation.create({
@@ -83,7 +96,7 @@ const reserveTable = async (req, res, next) => {
 
       newTable.reservation = reservation._id;
       newTable.isAvailable = false;
-
+      await newTable.save();
       day.tables.push(newTable);
       await day.save();
 
@@ -98,43 +111,52 @@ const reserveTable = async (req, res, next) => {
 
 // GET My Orders
 const getMyOrders = async (req, res, next) => {
+  // const { _id: userId } = req.user;
   const { userId } = req.query;
+  console.log("UserId from req.user :: ", userId);
   try {
     const reservations = await Reservation.find({ userId })
-      .populate([{ path: "table" }, { path: "bookingDetails" }])
+      .populate("bookingDetails")
+      .populate("table")
+      .sort({ createdAt: -1 })
       .exec();
     res.status(200).json(reservations);
+    console.log(reservations);
   } catch (err) {
     next(err);
   }
 };
 
 // DELETE an Order
-const deleteOrder = async (req, res, next) => {
-  const { reservationId } = req.query;
-  const { _id: userId } = req.user;
+// const deleteOrder = async (req, res, next) => {
+//   const { reservationId } = req.query;
+//   const { _id: userId } = req.user;
 
-  try {
-    // Find the reservation by both userId and reservationId
-    const deletedReservation = await Reservation.findOneAndDelete({
-      _id: reservationId,
-      userId: userId,
-    });
+//   try {
+//     // Find the reservation by both userId and reservationId
+//     const deletedReservation = await Reservation.findOneAndDelete({
+//       _id: reservationId,
+//       userId: userId,
+//     });
 
-    if (deletedReservation) {
-      console.log("Deleted reservation:", deletedReservation);
-      res.status(200).json({ message: "Reservation deleted successfully" });
-    } else {
-      console.log("Reservation not found.");
-      res.status(404).json({ message: "Reservation not found" });
-    }
-  } catch (error) {
-    console.error("Error deleting reservation:", error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
+//     if (deletedReservation) {
+//       console.log("Deleted reservation:", deletedReservation);
+//       res.status(200).json({ message: "Reservation deleted successfully" });
+//     } else {
+//       console.log("Reservation not found.");
+//       res.status(404).json({ message: "Reservation not found" });
+//     }
+//   } catch (error) {
+//     console.error("Error deleting reservation:", error);
+//     res.status(500).json({ message: "Internal Server Error" });
+//   }
+// };
+
+export {
+  reserveTable,
+  getMyOrders,
+  // deleteOrder
 };
-
-export { reserveTable, getMyOrders, deleteOrder };
 
 // const reserveTable = async (req, res, next) => {
 //   console.log("Reservation Submitted");

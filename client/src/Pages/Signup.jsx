@@ -3,7 +3,7 @@ import { Container } from "../master.js";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { useRegisterMutation } from "@/slices/usersApiSlice.js";
+import { useRegisterMutation } from "@/slices/api/usersApiSlice.js";
 import { setCredentials } from "@/slices/authSlice.js"; // after hitting backend api and getting data we gotta set it to STATE and LOCAL-STORAGE
 // toast
 import { useToast } from "@/shadcn/ui/use-toast";
@@ -35,7 +35,7 @@ function Signup() {
     e.preventDefault();
     if (password !== confirmPassword) {
       toast({
-        variant: "minimal",
+        variant: "destructive",
         title: "Passwords do not match.",
         description: "Please try again.",
         action: <ToastAction altText="Try again">Try again</ToastAction>,
@@ -50,7 +50,7 @@ function Signup() {
       } catch (error) {
         console.log(error?.data?.message || error.error);
         toast({
-          variant: "minimal",
+          variant: "destructive",
           title: error?.data?.message || error.error,
           description: "Please try again.",
           action: <ToastAction altText="Try again">Try again</ToastAction>,
@@ -113,7 +113,6 @@ function Signup() {
             className={`${inputCSS}`}
           />
           <Button
-            variant="antiFlashWhite"
             className="mt-12 w-full"
             // disabled={isLoading}
           >

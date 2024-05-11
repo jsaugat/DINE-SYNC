@@ -7,6 +7,8 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { toast } from "@/shadcn/ui/use-toast";
 import { Separator } from "@/shadcn/ui/separator";
 import Check from "../Check";
+import { clearAllSelection } from "@/slices/reservation/selectionSlice";
+import { clearAllTables } from "@/slices/reservation/totalTablesSlice";
 
 // redux
 import {
@@ -15,8 +17,10 @@ import {
   setBookingPhone,
   resetBooking,
 } from "@/slices/reservation/bookingDetailsSlice";
+// import { useCreateOrderMutation } from "@/slices/api/reservationApiSlice";
 
 function BookingDetails({ getFormattedDateTime }) {
+  // const [createOrder, { data, isLoading, error }] = useCreateOrderMutation();
   // RTK slices
   const { name, phone, email } = useSelector((state) => state.bookingDetails);
   const userId = useSelector((state) => state.auth.userInfo._id);
@@ -30,14 +34,15 @@ function BookingDetails({ getFormattedDateTime }) {
   useEffect(() => {
     console.log("reserdetails: ", tableNumber, size);
   }, []);
-  // Make a reservation request to the backend api.
-  const makeReservationRequest = async () => {
+
+  //? MAKE A ORDER REQUEST BY HITTING BACKEND API
+  const makeOrderRequest = async () => {
     const incompleteDetails =
       name.length === 0 || phone.length === 0 || email.length === 0;
 
     if (incompleteDetails) {
       toast({
-        variant: "minimal",
+        variant: "destructive",
         title: "Incomplete Details",
         description: "Please fill in all details.",
         action: <ToastAction altText="Try again">Okay</ToastAction>,
@@ -49,6 +54,7 @@ function BookingDetails({ getFormattedDateTime }) {
       const selectedDateTime = getFormattedDateTime(); // Get the combined date and time from user selection.
       try {
         // Send a POST request to reserve the table
+
         const response = await fetch(
           `http://localhost:6900/api/reservation?userId=${userId}`,
           {
@@ -70,6 +76,11 @@ function BookingDetails({ getFormattedDateTime }) {
           // If reservation is successful, log the response and update page
           const reservationResponse = await response.text();
           console.log("Reserved: " + reservationResponse);
+          //? RESET Filters, Tables and BookingDetails
+          dispatch(clearAllSelection());
+          dispatch(clearAllTables());
+          dispatch(resetBooking());
+          //? NAVIGATE to Thanks page
           navigate("/booking/thanks");
         } else {
           // If reservation fails, handle error appropriately
@@ -134,7 +145,7 @@ function BookingDetails({ getFormattedDateTime }) {
         />
         <button
           type="submit"
-          onClick={makeReservationRequest}
+          onClick={makeOrderRequest}
           className="animate-shimmer mt-12 h-14 px-6 py-2 border border-onyx bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] font-medium text-white transition-colors hover:shadow-[0_0_10px_2px] hover:shadow-slate-800 hover:border-slate-500 focus:outline-none focus:border focus:border-slate-500 inline-flex  items-center justify-center rounded-full  gap-3"
         >
           <span>Book Now</span>
@@ -146,3 +157,15 @@ function BookingDetails({ getFormattedDateTime }) {
 }
 
 export default BookingDetails;
+
+// const orderData = {
+//   name,
+//   phone,
+//   email,
+//   date: selectedDateTime,
+//   table: tableNumber,
+//   capacity: size,
+// };
+// const orderResponse = await createOrder(userId, orderData).unwrap();
+// console.log("Reserved: " + orderResponse);
+// navigate("/booking/thanks");

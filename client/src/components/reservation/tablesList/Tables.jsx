@@ -63,6 +63,19 @@ export default function Tables({ search, getFormattedDateTime }) {
             ? tables
             : tables.filter((table) => table.capacity == selectedSize);
           dispatch(setTotalTables(filteredTables));
+
+          //? Check if all tables are reserved
+          const allTablesReserved = filteredTables.every(
+            (table) => !table.isAvailable
+          );
+          //! If all tables are reserved
+          if (allTablesReserved) {
+            toast({
+              variant: "destructive",
+              title: "All tables are reserved for this date and time.",
+              description: "Please choose another day or time.",
+            });
+          }
         } else {
           console.log(
             "Error fetching tables from the endpoint: " + response.statusText

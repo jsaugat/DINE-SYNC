@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./slices/authSlice";
-import { apiSlice } from "./slices/apiSlice";
+import { apiSlice } from "./slices/api/apiSlice";
 import selectionReducer from "./slices/reservation/selectionSlice";
 import totalTablesReducer from "./slices/reservation/totalTablesSlice";
 import bookingDetailsReducer from "./slices/reservation/bookingDetailsSlice";

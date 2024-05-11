@@ -24,6 +24,7 @@ app.use("/", (req, res, next) => {
   });
   console.log("\x1b[32m%s\x1b[0m", "REQUEST BODY :");
   console.table(req.body);
+  console.log("reqUser: ", req.user);
   next();
 });
 

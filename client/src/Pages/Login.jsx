@@ -3,7 +3,7 @@ import { Container } from "../master";
 import { Button } from "@/shadcn/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux"; // to get user data from state and also dispatch
-import { useLoginMutation } from "@/slices/usersApiSlice"; // hit backend api
+import { useLoginMutation } from "@/slices/api/usersApiSlice"; // hit backend api
 import { setCredentials } from "@/slices/authSlice"; // after hitting backend api and getting data we gotta set it to STATE and LOCAL-STORAGE
 import "../Styles/App.scss";
 // toast
@@ -20,14 +20,13 @@ function Login() {
     ref.current.focus();
   }, []);
 
-  const { userInfo } = useSelector((state) => state.auth); 
-  // check auth state in devtools 
+  const { userInfo } = useSelector((state) => state.auth);
+  // check auth state in devtools
   // (notion: https://shorturl.at/eDKZ0)
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [login, { isLoading }] = useLoginMutation();
   const { toast } = useToast();
-  
 
   useEffect(() => {
     if (userInfo) navigate("/");
@@ -38,11 +37,12 @@ function Login() {
     try {
       //? Step1: hit backend api and retrieve data
       const res = await login({ email, password }).unwrap(); // unwrap unwraps the promise?
+      console.log("Login Response", res);
       //? Step2: dispatch
       dispatch(setCredentials({ ...res }));
       navigate("/");
       toast({
-        variant: "minimal",
+        // variant: "minimal",
         title: `Logged in as ${res.name}`,
         description: "Your preferences are now personalized.",
         action: <ToastAction altText="Okay">Okay</ToastAction>,
@@ -102,11 +102,7 @@ function Login() {
             className={`${inputCSS}`}
           />
           {isLoading && <Loader />}
-          <Button
-            disabled={isLoading}
-            variant="antiFlashWhite"
-            className="mt-14 w-full"
-          >
+          <Button disabled={isLoading} className="mt-14 w-full">
             Log in
           </Button>
         </div>

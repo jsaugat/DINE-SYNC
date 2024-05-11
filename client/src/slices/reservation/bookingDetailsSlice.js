@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+const initialBookingState = {
   name: "",
   phone: "",
   email: "",
@@ -8,7 +8,7 @@ const initialState = {
 
 const bookingDetailsSlice = createSlice({
   name: "bookingDetails",
-  initialState,
+  initialState: initialBookingState,
   reducers: {
     setBookingName: (state, action) => {
       state.name = action.payload;
@@ -19,8 +19,11 @@ const bookingDetailsSlice = createSlice({
     setBookingEmail: (state, action) => {
       state.email = action.payload;
     },
+    // TO RESET, you cannot directly "return initialState" as it breaks connection with the orignal state maintained by RTK's 'createSlice', instead modify the existing state object.
     resetBooking: (state) => {
-      return initialBookingState;
+      state.name = initialBookingState.name;
+      state.phone = initialBookingState.phone;
+      state.email = initialBookingState.email;
     },
   },
 });

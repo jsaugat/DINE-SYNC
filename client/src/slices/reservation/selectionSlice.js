@@ -22,10 +22,17 @@ export const selectionSlice = createSlice({
     },
     setTable: (state, action) => {
       state.table.number = action.payload;
-    }
+    },
+    clearAllSelection: (state) => {
+      state.date = null;
+      state.time = null;
+      state.size = 0;
+      state.table.number = null;
+    },
   },
 });
 
-export const { setSize, setTime, setDate, setTable } = selectionSlice.actions;
+export const { setSize, setTime, setDate, setTable, clearAllSelection } =
+  selectionSlice.actions;
 
 export default selectionSlice.reducer; // export for store

@@ -2,7 +2,7 @@ import { Button } from "@/shadcn/ui/button";
 import { Container } from "../master.js";
 import { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useUpdateProfileMutation } from "@/slices/usersApiSlice.js";
+import { useUpdateProfileMutation } from "@/slices/api/usersApiSlice.js";
 import { setCredentials } from "@/slices/authSlice.js"; // after hitting backend api and getting data we gotta set it to STATE and LOCAL-STORAGE
 // toast
 import { useToast } from "@/shadcn/ui/use-toast";

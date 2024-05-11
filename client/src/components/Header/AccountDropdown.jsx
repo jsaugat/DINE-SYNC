@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { UserSolid } from "@/assets/UserSolid";
 import { Link } from "react-router-dom";
-import { useLogoutMutation } from "@/slices/usersApiSlice";
+import { useLogoutMutation } from "@/slices/api/usersApiSlice";
 import { clearCredentials } from "@/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -78,7 +78,8 @@ export default function AccountDropdown({ userInfo }) {
 
         <div className="p-2">
           <Link
-            to="/profile/personal-info"
+            // to="/profile/personal-info"
+            to="/profile/orders"
             className="px-4 py-1 hover:bg-neutral-800 rounded-sm flex items-center gap-4"
           >
             <SettingsIcon sx={{ fontSize: 18 }} />

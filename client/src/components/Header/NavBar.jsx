@@ -92,10 +92,10 @@ const NavBar = () => {
           //? LOGGED OUT State
           <div className="space-x-4">
             <NavLink to={"login"}>
-              <Button variant="minimal">Log In</Button>
+              <Button variant="outline">Log In</Button>
             </NavLink>
             <NavLink to={"signup"}>
-              <Button variant="antiFlashWhite">Sign Up</Button>
+              <Button variant="">Sign Up</Button>
             </NavLink>
           </div>
         )}
