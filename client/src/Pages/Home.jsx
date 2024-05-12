@@ -76,7 +76,7 @@ export default HomePage;
 const ArrowBall = ({ className, arrowStyles }) => (
   <div
     className={cn(
-      "rounded-full h-12 w-[4.5rem] border overflow-hidden flex items-center justify-center",
+      "rounded-full size-[3.5rem] border overflow-hidden flex items-center justify-center",
       className
     )}
   >
@@ -86,12 +86,12 @@ const ArrowBall = ({ className, arrowStyles }) => (
       <ArrowRight
         strokeWidth="1.2px"
         size={"35px"}
-        className="absolute -left-14 w-[4.5rem] "
+        className="absolute -left-14 w-[3.5rem] "
       />
       <ArrowRight
         strokeWidth="1.2px"
         size={"35px"}
-        className="absolute w-[4.5rem] "
+        className="absolute w-[3.5rem] "
       />
     </div>
   </div>

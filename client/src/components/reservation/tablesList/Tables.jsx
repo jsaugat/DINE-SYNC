@@ -19,6 +19,8 @@ import {
 } from "@/shadcn/ui/table";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useToast } from "@/shadcn/ui/use-toast";
+import { CircleAlert, MoveLeft, CheckCheck } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Tables({ search, getFormattedDateTime }) {
   // selected details
@@ -106,51 +108,57 @@ export default function Tables({ search, getFormattedDateTime }) {
             </TableRow>
           </TableHeader>
           {/* //? Table Details Body */}
-          <TableBody>
-            {totalTables?.map((table) => (
-              <TableRow
-                key={table.number}
-                className={`cursor-pointer ${
-                  table.isAvailable ? "" : "text-neutral-500 hover:bg-black"
-                }`}
-                onClick={() => {
-                  if (!table.isAvailable) {
-                    toast({
-                      variant: "destructive",
-                      title: "Please select an availble table!!",
-                    });
-                    return;
-                  }
-                  dispatch(setTable(table.number));
-                  dispatch(setSize(table.capacity));
-                }}
-              >
-                {/* Table Status Cell */}
-                <TableCell className="text-center">
-                  {table.isAvailable ? (
-                    <div
-                      className={`${styles.available} ${styles.statusIndicator}`}
-                    >
-                      <span class="rounded-full size-2 bg-green-500 shadow-md shadow-black"></span>{" "}
-                      AVAILABLE
-                    </div>
-                  ) : (
-                    <div
-                      className={`${styles.booked} ${styles.statusIndicator}`}
-                    >
-                      <span class="rounded-full size-2 bg-red-600 shadow-sm shadow-black"></span>{" "}
-                      BOOKED
-                    </div>
-                  )}
-                </TableCell>
-                {/* Table Number Cell */}
-                <TableCell className="font-medium text-center">
-                  <span>T-{table.number}</span>
-                </TableCell>
-                {/* Capacity Cell */}
-                <TableCell className="text-center">{table.capacity}</TableCell>
-              </TableRow>
-            ))}
+          <TableBody className="relative">
+            {totalTables.length ? (
+              totalTables.map((table) => (
+                <TableRow
+                  key={table.number}
+                  className={`cursor-pointer ${
+                    table.isAvailable ? "" : "text-neutral-500 hover:bg-black"
+                  }`}
+                  onClick={() => {
+                    if (!table.isAvailable) {
+                      toast({
+                        variant: "destructive",
+                        title: "Please select an available table!!",
+                      });
+                      return;
+                    }
+                    dispatch(setTable(table.number));
+                    dispatch(setSize(table.capacity));
+                  }}
+                >
+                  {/* Table Status Cell */}
+                  <TableCell className="text-center">
+                    {table.isAvailable ? (
+                      <div
+                        className={`${styles.available} ${styles.statusIndicator}`}
+                      >
+                        <span class="rounded-full size-2 bg-green-500 shadow-md shadow-black"></span>{" "}
+                        AVAILABLE
+                      </div>
+                    ) : (
+                      <div
+                        className={`${styles.booked} ${styles.statusIndicator}`}
+                      >
+                        <span class="rounded-full size-2 bg-red-600 shadow-sm shadow-black"></span>{" "}
+                        BOOKED
+                      </div>
+                    )}
+                  </TableCell>
+                  {/* Table Number Cell */}
+                  <TableCell className="font-medium text-center">
+                    <span>T-{table.number}</span>
+                  </TableCell>
+                  {/* Capacity Cell */}
+                  <TableCell className="text-center">
+                    {table.capacity}
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <NotSelectedWarning />
+            )}
           </TableBody>
         </ScrollArea>
 
@@ -159,25 +167,21 @@ export default function Tables({ search, getFormattedDateTime }) {
             <TableCell colSpan={3} className="text-white bg-transparent py-3">
               {totalTables.length ? (
                 selectedTableNumber ? (
-                  <span className="flex gap-2 justify-center items-center">
-                    <CheckCircleIcon
-                      fontSize="small"
-                      className="rounded-full size-0"
-                    />{" "}
+                  <div className="flex gap-2 justify-center items-center">
+                    <CheckCheck className="text-white size-5" />
                     <span>
-                      Table{" "}
-                      <span className="text-googleBlue text-xl">
+                      <span className="text-green-500 text-xl">
                         T-{selectedTableNumber}
                       </span>{" "}
-                      is selected.
+                      Table is selected.
                     </span>
-                  </span>
+                  </div>
                 ) : (
                   <span>Please Select a Table</span>
                 )
               ) : (
-                <span className="text-googleBlue">
-                  <span>&#8592; &#xa0;</span> Select preferences to reveal
+                <span className="text-googleBlue flex items-center justify-center gap-2">
+                  <MoveLeft className="size-5" /> Select filters to reveal
                   tables.
                 </span>
               )}
@@ -191,3 +195,15 @@ export default function Tables({ search, getFormattedDateTime }) {
     </main>
   );
 }
+
+const NotSelectedWarning = () => (
+  <section className="absolute border rounded-lg p-4 text-muted-foreground bg-muted/30 w-full top-2 flex items-center justify-center">
+    <div className="flex items-center gap-2">
+      <CircleAlert
+        strokeWidth={"1.5px"}
+        className="text-muted-foreground size-4"
+      />{" "}
+      <div>Please pick a date and time.</div>
+    </div>
+  </section>
+);

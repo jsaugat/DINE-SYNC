@@ -12,7 +12,7 @@ import { Container } from "@/master";
 export default function Profile() {
   return (
     <Container className={"h-fit"}>
-      <main className="flex justify-center items-start mb-[8.5rem] gap-12 h-full">
+      <main className="mb-10 flex justify-center items-start gap-12 h-fit ">
         {/* Left Nav Box */}
         <nav className="flex flex-col items-start">
           <h3 className="text-3xl my-6">Account</h3>
@@ -31,7 +31,7 @@ export default function Profile() {
                 isPending ? "pending" : isActive ? "active" : ""
               }
             >
-              Orders
+              My Orders
             </NavLink>
           </ul>
         </nav>

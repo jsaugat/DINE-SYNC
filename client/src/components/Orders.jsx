@@ -1,25 +1,36 @@
 // style={{ gridTemplateColumns: "1fr 1fr 2fr 1.2fr 1fr" }}
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/shadcn/ui/alert-dialog";
 import { Button } from "@/shadcn/ui/button";
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ISOToReadableDate } from "@/utils/isoToReadableDate";
 import {
   setOrders,
-  // deleteOrder as deleteOrderLocally,
+  deleteOrder as deleteOrderLocally,
 } from "@/slices/reservation/ordersSlice";
 import {
-  // useDeleteOrderMutation,
+  useDeleteOrderMutation,
   useGetMyOrdersQuery,
 } from "@/slices/api/reservationApiSlice";
-import { LoaderCircle, Loader } from "lucide-react";
 import { toast } from "@/shadcn/ui/use-toast";
+import { LoaderCircle, Loader, MoveRight } from "lucide-react";
 import { CircleAlert } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Orders() {
   const { _id: userId } = useSelector((state) => state.auth.userInfo);
   const theOrders = useSelector((state) => state.orders);
-  // const [deleteOrder] = useDeleteOrderMutation();
+  const [deleteOrder, { isLoading: isDeleting }] = useDeleteOrderMutation();
   const {
     data: myOrders,
     isLoading,
@@ -38,13 +49,19 @@ export default function Orders() {
     if (myOrders) {
       dispatch(setOrders(myOrders));
     }
+    console.log("THE_ORDERS: ", theOrders);
   }, [userId, dispatch, myOrders]);
 
-  const handleCancelOrder = async (reservationId) => {
+  //! Delete an Order
+  const handleCancelOrder = async (orderId) => {
     console.log("cancel order");
     try {
-      // await deleteOrder(reservationId).unwrap();
-      // dispatch(deleteOrderLocally(reservationId));
+      await deleteOrder({ orderId, userId }).unwrap();
+      dispatch(deleteOrderLocally(orderId));
+      toast({
+        title: "Successfully deleted an order.",
+        action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>,
+      });
     } catch (err) {
       console.log("Error occurred while canceling order:", err);
     }
@@ -52,7 +69,7 @@ export default function Orders() {
 
   return (
     <div className="w-1/3">
-      <main className="h-[60rem] flex flex-col items-start gap-3 text-[0.9rem]">
+      <main className="min-h-[40rem] h-full flex flex-col items-start gap-3 text-[0.9rem]">
         <h3 className="text-3xl my-6 mb-4 text-white">Order History</h3>
         {isLoading ? (
           <div className="flex items-center gap-2 opacity-60">
@@ -74,10 +91,13 @@ export default function Orders() {
                 <div className=" text-googleBlue">Time</div>
                 <div className=" text-googleBlue">Duration</div>
 
-                <div className="py-2 px-1">
-                  <RoundedNeutralDiv>
+                <div className="py-2 px-1 text-2xl flex items-start justify-center">
+                  {/* <RoundedNeutralDiv> */}
+                  <div className="flex items-center gap-2">
+                    <div className="size-2 bg-green-500 rounded-full"></div>
                     T-{order.bookingDetails.tableNumber}
-                  </RoundedNeutralDiv>
+                  </div>
+                  {/* </RoundedNeutralDiv> */}
                 </div>
                 <div className="py-2 px-1">
                   <RoundedNeutralDiv>
@@ -119,18 +139,22 @@ export default function Orders() {
                 {`Ordered on ${ISOToReadableDate(order.createdAt, "date")}`}
               </span>
 
-              {/* Cancel Reservation */}
-              <Button
-                className="absolute right-4 bottom-5 rounded-full text-red-500 bg-red-500/10 hover:bg-red-600/20"
-                onClick={() => handleCancelOrder(order._id)}
-              >
-                Cancel Order
-              </Button>
+              {/* Delete an Order */}
+              <DeleteAlertDialog
+                trigger={
+                  <Button className="absolute right-4 bottom-5 rounded-full text-red-500 bg-red-500/10 hover:bg-red-600/20">
+                    Cancel Order
+                  </Button>
+                }
+                orderId={order._id}
+                handleCancelOrder={handleCancelOrder}
+                isDeleting={isDeleting}
+              />
             </figure>
           ))
         ) : (
-          <section className="border rounded-lg p-12 text-muted-foreground bg-muted/50 ">
-            <div className="flex items-center gap-2">
+          <section className="border rounded-lg p-12 text-muted-foreground bg-muted/50 backdrop-blur-[1px] w-full flex flex-col items-center justify-center">
+            <div className="flex items-center gap-2 justify-center">
               <CircleAlert
                 strokeWidth={"1.5px"}
                 className="text-muted-foreground size-5"
@@ -139,9 +163,13 @@ export default function Orders() {
             </div>
             <Link
               to="/booking"
-              className="underline text-googleBlue hover:text-googleBlue/70"
+              className="group underline text-googleBlue flex items-center gap-2"
             >
               Reserve a table
+              <MoveRight
+                className="size-4 group-hover:translate-x-1.5 transition-transform"
+                strokeWidth={"1.5px"}
+              />
             </Link>
           </section>
         )}
@@ -159,3 +187,34 @@ const RoundedNeutralDiv = ({ children, className }) => {
     </div>
   );
 };
+
+//! Delete Alert Dialog
+const DeleteAlertDialog = ({
+  trigger,
+  orderId,
+  handleCancelOrder,
+  isDeleting,
+}) => (
+  <AlertDialog>
+    <AlertDialogTrigger>{trigger}</AlertDialogTrigger>
+    <AlertDialogContent>
+      <AlertDialogHeader>
+        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+        <AlertDialogDescription>
+          This will permanently delete your this order. This action cannot be
+          undone.
+        </AlertDialogDescription>
+      </AlertDialogHeader>
+      <AlertDialogFooter>
+        <AlertDialogCancel>Cancel</AlertDialogCancel>
+        <AlertDialogAction
+          className="bg-red-900 text-destructive-foreground hover:bg-red-800/70"
+          onClick={() => handleCancelOrder(orderId)}
+        >
+          {isDeleting && <Loader className="size-5 animate-spin" />}
+          {!isDeleting && <span>Delete</span>}
+        </AlertDialogAction>
+      </AlertDialogFooter>
+    </AlertDialogContent>
+  </AlertDialog>
+);

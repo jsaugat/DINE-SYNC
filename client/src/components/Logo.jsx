@@ -1,9 +1,8 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-function Logo({ logoStyle, DineSync, className}) {
-  const scrollToTop = () => 
-    window.scroll({ top: 0, behavior: smooth })
+function Logo({ logoStyle, DineSync, className }) {
+  const scrollToTop = () => window.scroll({ top: 0, behavior: smooth });
 
   return (
     <NavLink to="" onClick={scrollToTop}>
@@ -35,8 +34,10 @@ function Logo({ logoStyle, DineSync, className}) {
           />
         </svg>
         {/* text */}
-        <h2 className={`text-3xl mix-blend-difference font-medium text-transparent bg-clip-text bg-gradient-to-r from-white via-white/80 to-slate-500 font-geistSans tracking-tight ${DineSync}`}>
-          DineSync
+        <h2
+          className={`text-3xl mix-blend-difference font-medium text-transparent bg-clip-text bg-gradient-to-r from-white via-white/80 to-slate-500 font-geistSans tracking-tight ${DineSync}`}
+        >
+          Rexervation
         </h2>
       </div>
     </NavLink>

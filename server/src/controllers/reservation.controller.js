@@ -128,35 +128,50 @@ const getMyOrders = async (req, res, next) => {
 };
 
 // DELETE an Order
-// const deleteOrder = async (req, res, next) => {
-//   const { reservationId } = req.query;
-//   const { _id: userId } = req.user;
+const deleteOrder = async (req, res, next) => {
+  // const { _id: userId } = req.user;
+  const { userId } = req.query;
+  const { orderId } = req.params;
 
-//   try {
-//     // Find the reservation by both userId and reservationId
-//     const deletedReservation = await Reservation.findOneAndDelete({
-//       _id: reservationId,
-//       userId: userId,
-//     });
+  try {
+    // Find the reservation by both userId and reservationId
+    const deletedReservation = await Reservation.findOneAndDelete({
+      _id: orderId,
+      userId,
+    });
 
-//     if (deletedReservation) {
-//       console.log("Deleted reservation:", deletedReservation);
-//       res.status(200).json({ message: "Reservation deleted successfully" });
-//     } else {
-//       console.log("Reservation not found.");
-//       res.status(404).json({ message: "Reservation not found" });
-//     }
-//   } catch (error) {
-//     console.error("Error deleting reservation:", error);
-//     res.status(500).json({ message: "Internal Server Error" });
-//   }
-// };
+    if (deletedReservation) {
+      console.log("Deleted reservation:", deletedReservation);
 
-export {
-  reserveTable,
-  getMyOrders,
-  // deleteOrder
+      // Update the associated table's isAvailable property to false
+      const selectedDateTime = deletedReservation.date;
+      const day = await Day.findOne({ date: selectedDateTime });
+
+      if (day) {
+        const table = day.tables.find(
+          (table) =>
+            table._id.toString() === deletedReservation.table.toString()
+        );
+
+        if (table) {
+          // Set the isAvailable property of the table to false
+          table.isAvailable = true;
+          await day.save();
+        }
+      }
+
+      res.status(200).json({ message: "Reservation deleted successfully" });
+    } else {
+      console.log("Reservation not found.");
+      res.status(404).json({ message: "Reservation not found" });
+    }
+  } catch (error) {
+    console.error("Error deleting reservation:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 };
+
+export { reserveTable, getMyOrders, deleteOrder };
 
 // const reserveTable = async (req, res, next) => {
 //   console.log("Reservation Submitted");

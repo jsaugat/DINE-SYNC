@@ -12,20 +12,19 @@ function App() {
   // const [isFooterHidden, setIsFooterHidden] = useState(false);
   return (
     <main className={`relative`}>
-      <div className="absolute h-full w-full -z-20 dark:bg-grid-white/[0.08] bg-grid-black/[0.2] pointer-events-none">
-        {/* VIGNETTE -----> */}
-        <div className="absolute -z-10 pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
-        {/* <----- VIGNETTE */}
+      {/* GRID */}
+      <div className="absolute h-full w-full -z-20 dark:bg-grid-white/[0.08] bg-grid-black/[0.2] pointer-events-none opacity-70">
+        {/* BLUR */}
+        <div className="absolute -top-10 bg-gradient-to-b from-black to-transparent h-16 w-full backdrop-blur-lg opacity-90" />
+        {/* VIGNETTE */}
+        <div className="absolute -z-10 pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
       </div>
-      {/* Cursor ball */}
-      {/* <PointerBall /> */}
-      {/* fixed Navigation */}
       <NavBar />
-      <Toaster />
       {/* variable Body */}
       <Outlet />
       {/* Footer */}
       <Footer />
+      <Toaster />
     </main>
   );
 }

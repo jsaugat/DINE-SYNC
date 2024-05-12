@@ -2,9 +2,10 @@ import express from "express";
 import {
   reserveTable,
   getMyOrders,
-  // deleteOrder,
+  deleteOrder,
 } from "../controllers/reservation.controller.js";
 import { validateToken } from "../middlewares/auth.middleware.js";
+//! make use of validateToken please XD
 
 const router = express.Router();
 
@@ -12,6 +13,6 @@ const router = express.Router();
 router.post("/", reserveTable);
 // MY ORDERS
 router.get("/myorders", getMyOrders);
-// router.delete("/myorders/:id", validateToken, deleteOrder);
+router.delete("/myorders/:orderId", deleteOrder);
 
 export default router;

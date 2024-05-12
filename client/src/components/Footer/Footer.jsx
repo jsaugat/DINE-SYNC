@@ -7,21 +7,16 @@ function Footer() {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
+      left: 0,
       behavior: "smooth",
     });
-  }
+  };
   return (
-    <div className="mt-[4rem] text-left ">
+    <footer className="mt-[2rem] text-left">
       <div className="border border-y-onyx border-x-0 h-[20.5rem] px-[10.4rem] py-[6.4rem] flex justify-between items-start bg-gradient-to-b from-black to-transparent shadow-[0_-30px_50px_10px] shadow-black/50">
         {/* Logo */}
-        <NavLink
-          to="/"
-          onClick={scrollToTop}
-        >
-          <Logo 
-            logoStyle="h-[2.5rem] w-[2.5rem]" 
-            DineSync="text-4xl"
-          />
+        <NavLink to="/" onClick={scrollToTop}>
+          <Logo logoStyle="h-[2.5rem] w-[2.5rem]" DineSync="text-4xl" />
         </NavLink>
 
         <div className="flex gap-[10rem]">
@@ -33,13 +28,13 @@ function Footer() {
                 <NavLink to="/">Home</NavLink>
               </li>
               <li className="w-fit">
-                <NavLink to="/menu">The Menu</NavLink>
-              </li>
-              <li className="w-fit">
                 <NavLink to="/about">About us</NavLink>
               </li>
               <li className="w-fit">
-                <NavLink to="/contact">Contact</NavLink>
+                <NavLink to="/booking">Reservation</NavLink>
+              </li>
+              <li className="w-fit">
+                <NavLink to="/profile/orders">Orders</NavLink>
               </li>
             </ul>
           </div>
@@ -47,16 +42,13 @@ function Footer() {
           <div>
             <h3 className="text-base font-medium uppercase">Contacts</h3>
             <ul className="flex flex-col mt-5 text-[0.9rem] font-thin">
-              <li>info@dinesync.com</li>
-              <li>+977 9841586912</li>
+              <li>xxx@example.com</li>
+              <li>+977 XXXXX</li>
             </ul>
           </div>
         </div>
         {/* Back to top */}
-        <NavLink
-          to={location.pathname + location.search}
-          onClick={scrollToTop}
-        >
+        <NavLink to={location.pathname + location.search} onClick={scrollToTop}>
           <div className="back-to-top flex gap-2">
             <svg
               className="back-to-top-arrow"
@@ -87,7 +79,7 @@ function Footer() {
         <p>&copy;2024. All rights reserved.</p>
         <p>Designed by Saugat Joshi</p>
       </div>
-    </div>
+    </footer>
   );
 }
 

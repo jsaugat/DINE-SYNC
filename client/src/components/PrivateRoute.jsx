@@ -9,7 +9,7 @@ export default function PrivateRoute() {
   useEffect(() => {
     if (!userInfo) {
       toast({
-        variant: "destructive",
+        // variant: "minimal",
         description: "You are required to login first.",
       });
     }

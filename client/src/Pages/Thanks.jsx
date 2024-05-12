@@ -12,14 +12,14 @@ export default function Thanks() {
         <div className="flex flex-col items-center justify-center">
           <h1 className="text-5xl my-6">Thank you for choosing us !</h1>
           <h3 className="">
-            We received your order. We will reach out to you shortly.
+            We received your order. We will reach out to you shortly !
           </h3>
           <h4 className="text-neutral-400 text-md">
             For further inquiry. Contact us at :{" "}
-            <span className="text-blue-500">012387988</span>
+            <span className="text-blue-500">01XXXXX</span>
           </h4>
         </div>
-        <div className="my-6 flex gap-6 text-sm">
+        <div className="my-6 flex gap-4 text-sm">
           <Link to={"/"} className="rounded-full border border-onyx px-3 py-2">
             Back to Home
           </Link>

@@ -5,8 +5,8 @@ import { Input } from "@/shadcn/ui/input";
 import { Label } from "@/shadcn/ui/label";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { toast } from "@/shadcn/ui/use-toast";
-import { Separator } from "@/shadcn/ui/separator";
-import Check from "../Check";
+// import Check from "../Check";
+import { CheckCheck } from "lucide-react";
 import { clearAllSelection } from "@/slices/reservation/selectionSlice";
 import { clearAllTables } from "@/slices/reservation/totalTablesSlice";
 
@@ -17,6 +17,7 @@ import {
   setBookingPhone,
   resetBooking,
 } from "@/slices/reservation/bookingDetailsSlice";
+import { ToastAction } from "@/shadcn/ui/toast";
 // import { useCreateOrderMutation } from "@/slices/api/reservationApiSlice";
 
 function BookingDetails({ getFormattedDateTime }) {
@@ -30,6 +31,7 @@ function BookingDetails({ getFormattedDateTime }) {
   } = useSelector((state) => state.selection);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  // const toast = useToast();
 
   useEffect(() => {
     console.log("reserdetails: ", tableNumber, size);
@@ -38,13 +40,22 @@ function BookingDetails({ getFormattedDateTime }) {
   //? MAKE A ORDER REQUEST BY HITTING BACKEND API
   const makeOrderRequest = async () => {
     const incompleteDetails =
-      name.length === 0 || phone.length === 0 || email.length === 0;
+      name.length === 0 || phone.length === 0 || email.length === 0 || !size;
 
     if (incompleteDetails) {
       toast({
         variant: "destructive",
-        title: "Incomplete Details",
+        title: "Incomplete Details.",
         description: "Please fill in all details.",
+        action: <ToastAction altText="Try again">Okay</ToastAction>,
+        className: "px-7 py-4",
+      });
+      return;
+    } else if (!tableNumber) {
+      toast({
+        variant: "destructive",
+        title: "Please select a table to proceed.",
+        description: "There was a problem in your request.",
         action: <ToastAction altText="Try again">Okay</ToastAction>,
         className: "px-7 py-4",
       });
@@ -76,12 +87,32 @@ function BookingDetails({ getFormattedDateTime }) {
           // If reservation is successful, log the response and update page
           const reservationResponse = await response.text();
           console.log("Reserved: " + reservationResponse);
+
           //? RESET Filters, Tables and BookingDetails
           dispatch(clearAllSelection());
           dispatch(clearAllTables());
           dispatch(resetBooking());
           //? NAVIGATE to Thanks page
           navigate("/booking/thanks");
+          //? TOASTIFY
+          toast({
+            title: "Successfully reserved a table!",
+            description: "Thank you.",
+            // action: <ToastAction altText="Try again">Okay</ToastAction>,
+            className: "px-7 py-4",
+          });
+          // Send thank you email
+          try {
+            await fetch("http://localhost:6900/api/auth/send-email", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ email }),
+            });
+          } catch (error) {
+            console.error("Error sending thank you email:", error);
+          }
         } else {
           // If reservation fails, handle error appropriately
           console.error("Reservation failed:", response.statusText);
@@ -103,24 +134,27 @@ function BookingDetails({ getFormattedDateTime }) {
           Ensure all information is accurate.
         </p>
       </section>
-      <section className="text-left">
+      <form className="text-left" onSubmit={(e) => e.preventDefault()}>
         {tableNumber && (
           <div className="mb-7">
-            <span className=" my-1 flex items-center gap-2 mx-auto">
-              <Check />
-              <span>
-                Table{" "}
-                <span className="text-googleBlue text-xl">T-{tableNumber}</span>{" "}
-                is selected.
+            <div className="py-2 flex gap-2 justify-left items-center rounded-lg border border-dineSync/20 bg-dineSync/10">
+              <CheckCheck className="text-white ml-3.5 size-5" />
+              <span className="ml-5">
+                <p className="text-green-500 text-xl">
+                  T-{tableNumber}{" "}
+                  <span className="text-base text-white">
+                    table is selected.
+                  </span>
+                </p>
               </span>
-            </span>
-            <Separator />
+            </div>
+            {/* <Separator /> */}
           </div>
         )}
         <Label htmlFor="email">Name</Label>
         <Input
           id="name"
-          placeholder="Your Name"
+          placeholder="eg. John Doe"
           value={name}
           onChange={(e) => dispatch(setBookingName(e.target.value))}
           className="mb-2 mt-1 w-[16rem]"
@@ -129,7 +163,7 @@ function BookingDetails({ getFormattedDateTime }) {
         <Input
           type="email"
           id="email"
-          placeholder="Email"
+          placeholder="eg. john@example.com"
           value={email}
           onChange={(e) => dispatch(setBookingEmail(e.target.value))}
           className="mb-2 mt-1"
@@ -138,7 +172,7 @@ function BookingDetails({ getFormattedDateTime }) {
         <Input
           type="tel"
           id="phone"
-          placeholder="Phone"
+          placeholder="eg. XXXXXXX"
           value={phone}
           onChange={(e) => dispatch(setBookingPhone(e.target.value))}
           className="mb-2 mt-1"
@@ -146,12 +180,13 @@ function BookingDetails({ getFormattedDateTime }) {
         <button
           type="submit"
           onClick={makeOrderRequest}
+          // disabled={true}
           className="animate-shimmer mt-12 h-14 px-6 py-2 border border-onyx bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] font-medium text-white transition-colors hover:shadow-[0_0_10px_2px] hover:shadow-slate-800 hover:border-slate-500 focus:outline-none focus:border focus:border-slate-500 inline-flex  items-center justify-center rounded-full  gap-3"
         >
           <span>Book Now</span>
           <ArrowForwardIcon fontSize="small" />
         </button>
-      </section>
+      </form>
     </main>
   );
 }

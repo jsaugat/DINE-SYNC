@@ -20,12 +20,15 @@ export const ReservationApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ["Order"],
     }),
 
-    //? DELETE a Order
+    //! DELETE a Order
     deleteOrder: builder.mutation({
-      query: (OrderId) => ({
-        url: `${BASE_URL}/myorders/${OrderId}`,
-        method: "DELETE",
-      }),
+      query({ orderId, userId }) {
+        return {
+          url: `${BASE_URL}/myorders/${orderId}?userId=${userId}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: ["Order"],
     }),
   }),
 });
