@@ -1,7 +1,7 @@
 import { app } from "./app.js";
 import dotenv from "dotenv";
 import connectDB from "./database/connection.js";
-// import usersRoute from "./routes/users.js";
+import usersRoute from "./routes/users.js";
 import authRoute from "./routes/auth.js";
 import {
   notFoundHandler,
@@ -32,7 +32,7 @@ app.use("/", (req, res, next) => {
 app.use("/api/auth", authRoute);
 app.use("/api/tables", tablesRoute);
 app.use("/api/reservation", reservationRoute);
-// app.use("/api/users", usersRoute);
+app.use("/api/users", usersRoute);
 
 //! 404 and error handler middlewares
 app.use(notFoundHandler);

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { UserSolid } from "@/assets/UserSolid";
 import { Link } from "react-router-dom";
-import { useLogoutMutation } from "@/slices/api/usersApiSlice";
+import { useLogoutMutation } from "@/slices/api/authApiSlice";
 import { clearCredentials } from "@/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";

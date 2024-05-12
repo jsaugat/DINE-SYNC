@@ -8,8 +8,8 @@ import ordersReducer from "./slices/reservation/ordersSlice";
 
 const store = configureStore({
   reducer: {
+    [apiSlice.reducerPath]: apiSlice.reducer,
     auth: authReducer,
-    [apiSlice.reducerPath]: apiSlice.reducer, // api state will be displayed in the redux devtools - https://shorturl.at/eDKZ0
     bookingDetails: bookingDetailsReducer,
     totalTables: totalTablesReducer,
     selection: selectionReducer,

@@ -7,7 +7,7 @@ import {
   updateUserProfile,
 } from "../controllers/auth.controller.js";
 import { sendEmail } from "../controllers/email.controller.js";
-import { validateToken } from "../middlewares/auth.middleware.js";
+import { validateToken } from "../middlewares/validateToken.js";
 
 const router = express.Router();
 

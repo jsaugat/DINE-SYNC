@@ -10,16 +10,32 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/shadcn/ui/alert-dialog";
-import React from "react";
+import React, { useEffect } from "react";
 import { CircleAlert } from "lucide-react";
 import { Button } from "@/shadcn/ui/button";
 import { Trash2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { useGetUsersQuery } from "@/slices/api/usersApiSlice.js";
+import { setUsers } from "@/slices/usersSlice.js";
 
 export default function ManageUsers({ contentWidth }) {
-  const users = true;
-  const isLoading = false;
-  const error = false;
+  const { isAdmin } = useSelector((state) => state.auth.userInfo);
+  const { data: users, isLoading, error } = useGetUsersQuery(isAdmin);
+  const usersState = useSelector((state) => state.users);
+  const dispatch = useDispatch();
+  // const isLoading = false;
+  // const error = false;
+
+  useEffect(() => {
+    console.log("users ?? ", users);
+  }, []);
+
+  // useEffect(() => {
+  //   if (users) {
+  //     dispatch(setUsers(users));
+  //   }
+  // }, [dispatch, users]);
+
   return (
     <div className={contentWidth}>
       <main className="min-h-[40rem] h-full flex flex-col items-start gap-3 text-[0.9rem]">
@@ -30,8 +46,8 @@ export default function ManageUsers({ contentWidth }) {
           <Loader />
         ) : error ? (
           <div>Error: {error.message}</div>
-        ) : users ? (
-          <UserCard />
+        ) : usersState ? (
+          usersState.map((user, idx) => <UserCard key={idx} />)
         ) : (
           <NoUsersMessage />
         )}
@@ -44,13 +60,21 @@ export default function ManageUsers({ contentWidth }) {
 //? UserCard
 const UserCard = () => (
   <figure className="p-4 w-full rounded-lg bg-muted/50 border flex justify-between items-center">
-    <div className="flex flex-col items-start">
-      <p>Saugat Joshi</p>
-      <p className="text-googleBlue">jsaugatt02@gmail.com</p>
-    </div>
-    <span className="text-muted-foreground text-xs">
-      registered on May 12, 2024
-    </span>
+    <section className="pr-4 flex justify-between items-center">
+      <div className="flex flex-col items-start">
+        <span>Saugat Joshi</span>
+        <span className="text-googleBlue">jsaugatt02@gmail.com</span>
+      </div>
+    </section>
+    <section>
+      <span className="text-sm flex items-center gap-2">
+        <div className="size-2 rounded-full bg-green-500" /> 2 current
+        reservations
+      </span>
+      <span className="text-muted-foreground text-xs">
+        registered on May 12, 2024
+      </span>
+    </section>
     <DeleteAlertDialog
       trigger={
         <Button variant="outline" className="flex items-center gap-2">
@@ -91,7 +115,8 @@ const DeleteAlertDialog = ({ trigger }) => (
       <AlertDialogHeader>
         <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
         <AlertDialogDescription>
-          This will permanently delete this user from database.
+          This will permanently delete this user and their reservation details
+          from database.
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>

@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import { handleUnauthorized } from "../utils/handleUnauthorized.js";
 
 export const validateToken = asyncHandler(async function (req, res, next) {
   // let token = req.cookies.jwt;
@@ -34,8 +35,3 @@ export const validateToken = asyncHandler(async function (req, res, next) {
     }
   }
 });
-
-const handleUnauthorized = (res, message) => {
-  res.status(401);
-  throw new Error(`Unauthorized: ${message}`);
-};

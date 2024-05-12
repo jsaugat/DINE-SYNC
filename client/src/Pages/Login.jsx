@@ -3,7 +3,7 @@ import { Container } from "../master";
 import { Button } from "@/shadcn/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux"; // to get user data from state and also dispatch
-import { useLoginMutation } from "@/slices/api/usersApiSlice"; // hit backend api
+import { useLoginMutation } from "@/slices/api/authApiSlice"; // hit backend api
 import { setCredentials } from "@/slices/authSlice"; // after hitting backend api and getting data we gotta set it to STATE and LOCAL-STORAGE
 import "../Styles/App.scss";
 // toast
