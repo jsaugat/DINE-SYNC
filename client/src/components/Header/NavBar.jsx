@@ -19,7 +19,7 @@ const NavBar = () => {
       toast({
         variant: "minimal",
         title: "Please Login to check your orders.",
-        description: "Friday, February 10, 2023 at 5:57 PM",
+        // description: "Friday, February 10, 2023 at 5:57 PM",
       });
       navigate("/login");
     }
@@ -82,6 +82,18 @@ const NavBar = () => {
             Orders
           </NavLink>
         </li>
+        {userInfo?.isAdmin && (
+          <li>
+            <NavLink
+              to="admin/users"
+              className={({ isActive }) =>
+                isActive ? "text-white" : "text-neutral-400"
+              }
+            >
+              Dashboard
+            </NavLink>
+          </li>
+        )}
       </ul>
       {/* account info */}
       <section>

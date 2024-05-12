@@ -141,14 +141,14 @@ export default function Orders() {
 
               {/* Delete an Order */}
               <DeleteAlertDialog
-                trigger={
-                  <Button className="absolute right-4 bottom-5 rounded-full text-red-500 bg-red-500/10 hover:bg-red-600/20">
-                    Cancel Order
-                  </Button>
-                }
                 orderId={order._id}
                 handleCancelOrder={handleCancelOrder}
                 isDeleting={isDeleting}
+                trigger={
+                  <Button className="absolute right-4 bottom-5 rounded-full text-red-500 bg-red-900/20 hover:bg-red-900/30">
+                    Cancel Order
+                  </Button>
+                }
               />
             </figure>
           ))
@@ -208,7 +208,7 @@ const DeleteAlertDialog = ({
       <AlertDialogFooter>
         <AlertDialogCancel>Cancel</AlertDialogCancel>
         <AlertDialogAction
-          className="bg-red-900 text-destructive-foreground hover:bg-red-800/70"
+          className="text-red-500 bg-red-900/20 hover:bg-red-900/30"
           onClick={() => handleCancelOrder(orderId)}
         >
           {isDeleting && <Loader className="size-5 animate-spin" />}

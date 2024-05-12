@@ -8,6 +8,8 @@ import {
 import PersonalInfo from "../components/PersonalInfo";
 import Orders from "../components/Orders";
 import { Container } from "@/master";
+import { cn } from "@/utils/cn";
+import { Package } from "lucide-react";
 
 export default function Profile() {
   return (
@@ -27,11 +29,14 @@ export default function Profile() {
             </NavLink> */}
             <NavLink
               to={"/profile/orders"}
-              className={({ isActive, isPending }) =>
-                isPending ? "pending" : isActive ? "active" : ""
-              }
+              className={cn(
+                ({ isActive, isPending }) =>
+                  isPending ? "pending" : isActive ? "active" : "",
+                "flex items-center gap-3"
+              )}
             >
-              My Orders
+              <Package className="size-[1.15rem]" strokeWidth="1.5px"></Package> My
+              Orders
             </NavLink>
           </ul>
         </nav>

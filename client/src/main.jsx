@@ -23,6 +23,10 @@ import {
 } from "react-router-dom";
 import store from "./store.js";
 import { Provider } from "react-redux";
+import AdminRoute from "@/components/AdminRoute";
+import Dashboard from "./pages/admin/Dashboard";
+import ManageUsers from "@/pages/admin/ManageUsers";
+import ManageOrders from "@/pages/admin/ManageOrders";
 
 const routes = createRoutesFromElements(
   <Route path="/" element={<App />}>
@@ -39,6 +43,12 @@ const routes = createRoutesFromElements(
       <Route path="profile/*" element={<Profile />}>
         <Route path="personal-info" element={<PersonalInfo />} />
         <Route path="orders" element={<Orders />} />
+      </Route>
+      <Route path="" element={<AdminRoute />}>
+        <Route path="admin/*" element={<Dashboard />}>
+          <Route path="users" element={<ManageUsers />} />
+          <Route path="orders" element={<ManageOrders />} />
+        </Route>
       </Route>
     </Route>
   </Route>
