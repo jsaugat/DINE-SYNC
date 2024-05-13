@@ -79,7 +79,7 @@ const NavBar = () => {
               isActive ? "text-white" : "text-neutral-400"
             }
           >
-            Orders
+            My Orders
           </NavLink>
         </li>
         {userInfo?.isAdmin && (

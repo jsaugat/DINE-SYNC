@@ -66,6 +66,10 @@ const reserveTable = async (req, res, next) => {
         await day.save();
         // await table.save();
         console.log("Reserved");
+        // Update User model
+        await User.findByIdAndUpdate(userId, {
+          $push: { reservations: reservation._id },
+        });
         res.status(200).send("Added Reservation");
       } else {
         console.log("Table not available");
@@ -101,6 +105,11 @@ const reserveTable = async (req, res, next) => {
       await day.save();
 
       console.log("Reserved and new table created");
+      // Update User model
+      await User.findByIdAndUpdate(userId, {
+        $push: { reservations: reservation._id },
+      });
+
       res.status(200).json(reservation);
     }
   } catch (err) {
@@ -129,12 +138,11 @@ const getMyOrders = async (req, res, next) => {
 
 // DELETE an Order
 const deleteOrder = async (req, res, next) => {
-  // const { _id: userId } = req.user;
   const { userId } = req.query;
   const { orderId } = req.params;
 
   try {
-    // Find the reservation by both userId and reservationId
+    // Find and delete the reservation by both userId and reservationId
     const deletedReservation = await Reservation.findOneAndDelete({
       _id: orderId,
       userId,
@@ -143,7 +151,7 @@ const deleteOrder = async (req, res, next) => {
     if (deletedReservation) {
       console.log("Deleted reservation:", deletedReservation);
 
-      // Update the associated table's isAvailable property to false
+      // Update the associated table's isAvailable property to true
       const selectedDateTime = deletedReservation.date;
       const day = await Day.findOne({ date: selectedDateTime });
 
@@ -154,11 +162,16 @@ const deleteOrder = async (req, res, next) => {
         );
 
         if (table) {
-          // Set the isAvailable property of the table to false
+          // Set the isAvailable property of the table to true
           table.isAvailable = true;
           await day.save();
         }
       }
+
+      // Remove reservation from User model
+      await User.findByIdAndUpdate(userId, {
+        $pull: { reservations: orderId },
+      });
 
       res.status(200).json({ message: "Reservation deleted successfully" });
     } else {
@@ -170,6 +183,55 @@ const deleteOrder = async (req, res, next) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+// const deleteOrder = async (req, res, next) => {
+//   const { userId } = req.query;
+//   const { orderId } = req.params;
+
+//   try {
+//     // Find and delete the reservation by both userId and reservationId
+//     const deletedReservation = await Reservation.findOneAndDelete({
+//       _id: orderId,
+//       userId,
+//     });
+
+//     // If successfully deleted reservation.
+//     if (deletedReservation) {
+//       console.log("Deleted reservation:", deletedReservation);
+
+//       // Update the associated table's isAvailable property to true
+//       const selectedDateTime = deletedReservation.date;
+//       const day = await Day.findOne({ date: selectedDateTime });
+
+//       if (day) {
+//         const table = day.tables.find(
+//           (table) =>
+//             table._id.toString() === deletedReservation.table.toString()
+//         );
+
+//         if (table) {
+//           // Set the isAvailable property of the table to true
+//           table.isAvailable = true;
+//           await day.save(); // Save the changes to the day
+//         }
+//       }
+
+//       // Remove reservation from User model
+//       await User.findByIdAndUpdate(userId, {
+//         $pull: { reservations: orderId },
+//       });
+
+//       res.status(200).json({ message: "Reservation deleted successfully" });
+//     } else {
+//       console.log("Reservation not found.");
+//       res.status(404).json({ message: "Reservation not found" });
+//     }
+//   } catch (error) {
+//     console.error("Error deleting reservation:", error);
+//     res.status(500).json({ message: "Internal Server Error" });
+//   }
+// };
+
+export default deleteOrder;
 
 export { reserveTable, getMyOrders, deleteOrder };
 
@@ -240,5 +302,48 @@ export { reserveTable, getMyOrders, deleteOrder };
 //   } catch (err) {
 //     console.error("Error occurred while reserving table:", err);
 //     res.status(500).send("Internal Server Error");
+//   }
+// };
+
+// const deleteOrder = async (req, res, next) => {
+//   // const { _id: userId } = req.user;
+//   const { userId } = req.query;
+//   const { orderId } = req.params;
+
+//   try {
+//     // Find the reservation by both userId and reservationId
+//     const deletedReservation = await Reservation.findOneAndDelete({
+//       _id: orderId,
+//       userId,
+//     });
+
+//     if (deletedReservation) {
+//       console.log("Deleted reservation:", deletedReservation);
+
+//       // Update the associated table's isAvailable property to false
+//       const selectedDateTime = deletedReservation.date;
+//       const day = await Day.findOne({ date: selectedDateTime });
+
+//       if (day) {
+//         const table = day.tables.find(
+//           (table) =>
+//             table._id.toString() === deletedReservation.table.toString()
+//         );
+
+//         if (table) {
+//           // Set the isAvailable property of the table to false
+//           table.isAvailable = true;
+//           await day.save();
+//         }
+//       }
+
+//       res.status(200).json({ message: "Reservation deleted successfully" });
+//     } else {
+//       console.log("Reservation not found.");
+//       res.status(404).json({ message: "Reservation not found" });
+//     }
+//   } catch (error) {
+//     console.error("Error deleting reservation:", error);
+//     res.status(500).json({ message: "Internal Server Error" });
 //   }
 // };

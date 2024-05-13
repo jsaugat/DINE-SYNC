@@ -9,7 +9,6 @@ import "@/Styles/App.scss";
 // import { GeistMono } from 'geist/font/mono';
 
 function App() {
-  // const [isFooterHidden, setIsFooterHidden] = useState(false);
   return (
     <main className={`relative`}>
       {/* GRID */}

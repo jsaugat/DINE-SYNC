@@ -10,31 +10,78 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/shadcn/ui/alert-dialog";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { CircleAlert } from "lucide-react";
 import { Button } from "@/shadcn/ui/button";
-import { Trash2 } from "lucide-react";
+import { Trash2, Loader as LoaderLucide } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
-import { useGetUsersQuery } from "@/slices/api/usersApiSlice.js";
+import {
+  useDeleteUserMutation,
+  useGetUsersQuery,
+} from "@/slices/api/usersApiSlice.js";
 import { setUsers } from "@/slices/usersSlice.js";
+import { deleteUser } from "@/slices/usersSlice.js";
 
 export default function ManageUsers({ contentWidth }) {
-  const { isAdmin } = useSelector((state) => state.auth.userInfo);
-  const { data: users, isLoading, error } = useGetUsersQuery(isAdmin);
-  const usersState = useSelector((state) => state.users);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const { isAdmin, _id: userId } = useSelector((state) => state.auth.userInfo);
+  //! const { data: usersData, isLoading, error } = useGetUsersQuery(isAdmin);
+  //!const [deleteUser, { data, isLoading: isDeleting, error }] = useDeleteUserMutation(userId);
+  const usersData = useSelector((state) => state.users.usersData);
   const dispatch = useDispatch();
-  // const isLoading = false;
-  // const error = false;
+  const isLoading = false;
+  const error = false;
 
   useEffect(() => {
-    console.log("users ?? ", users);
-  }, []);
+    async function fetchAndSetUsers(url) {
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        console.log("ALL_USERS:: ", data);
+        dispatch(setUsers(data));
+      } catch (error) {
+        // Handle errors here
+        console.error("Error fetching or setting users:", error);
+      }
+    }
 
-  // useEffect(() => {
-  //   if (users) {
-  //     dispatch(setUsers(users));
-  //   }
-  // }, [dispatch, users]);
+    fetchAndSetUsers(`http://localhost:6900/api/users?isAdmin=${isAdmin}`);
+  }, [dispatch, isAdmin]);
+  console.log("users ?? ", usersData);
+
+  async function handleDeleteUser(userId) {
+    try {
+      setIsDeleting(true);
+      const response = await fetch(
+        `http://localhost:6900/api/users/${userId}?isAdmin=${isAdmin}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            // Add any other headers if required
+          },
+        }
+      );
+
+      if (!response.ok) {
+        console.error("Failed to delete user");
+      }
+
+      console.log("User deleted successfully");
+      dispatch(deleteUser(userId));
+      // Optionally, you can handle the response body here if needed:
+      // const data = await response.json();
+      // console.log('Response:', data);
+      setIsDeleting(false);
+    } catch (error) {
+      setIsDeleting(false);
+      console.error("Error deleting user:", error.message);
+      // Handle errors here
+    }
+  }
 
   return (
     <div className={contentWidth}>
@@ -46,33 +93,57 @@ export default function ManageUsers({ contentWidth }) {
           <Loader />
         ) : error ? (
           <div>Error: {error.message}</div>
-        ) : usersState ? (
-          usersState.map((user, idx) => <UserCard key={idx} />)
-        ) : (
+        ) : !usersData ? (
+          // JSON.stringify(usersData)
           <NoUsersMessage />
+        ) : (
+          usersData
+            .filter((user) => user.isAdmin === false) // filter out admin users
+            .map((user, idx) => (
+              <UserCard
+                key={idx}
+                name={user.name}
+                email={user.email}
+                userId={user._id}
+                registeredOn={user.createdAt}
+                handleDeleteUser={handleDeleteUser}
+                isDeleting={isDeleting}
+              />
+            ))
         )}
       </main>
-      Users
     </div>
   );
 }
 
 //? UserCard
-const UserCard = () => (
-  <figure className="p-4 w-full rounded-lg bg-muted/50 border flex justify-between items-center">
-    <section className="pr-4 flex justify-between items-center">
+const UserCard = ({
+  name,
+  email,
+  userId,
+  registeredOn,
+  handleDeleteUser,
+  isDeleting,
+}) => (
+  <figure className="p-4 w-full rounded-lg bg-muted/40 border backdrop-blur-sm flex justify-between items-center">
+    <section className="pr-4 flex flex-1 justify-between items-center">
       <div className="flex flex-col items-start">
-        <span>Saugat Joshi</span>
-        <span className="text-googleBlue">jsaugatt02@gmail.com</span>
+        <span>{name}</span>
+        <span className="text-googleBlue">{email}</span>
       </div>
     </section>
-    <section>
+    <section className="flex-1 text-left">
       <span className="text-sm flex items-center gap-2">
         <div className="size-2 rounded-full bg-green-500" /> 2 current
         reservations
       </span>
       <span className="text-muted-foreground text-xs">
-        registered on May 12, 2024
+        registered on{" "}
+        {new Date(registeredOn).toLocaleDateString("en-US", {
+          month: "long",
+          day: "numeric",
+          year: "numeric",
+        })}
       </span>
     </section>
     <DeleteAlertDialog
@@ -82,6 +153,10 @@ const UserCard = () => (
           <span>Remove</span>
         </Button>
       }
+      className="flex-1"
+      userId={userId}
+      handleDeleteUser={handleDeleteUser}
+      isDeleting={isDeleting}
     />
   </figure>
 );
@@ -108,21 +183,30 @@ const NoUsersMessage = () => (
 );
 
 //! Delete alert dialog
-const DeleteAlertDialog = ({ trigger }) => (
-  <AlertDialog>
+const DeleteAlertDialog = ({
+  trigger,
+  className,
+  handleDeleteUser,
+  isDeleting,
+  userId,
+}) => (
+  <AlertDialog className={className}>
     <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
     <AlertDialogContent>
       <AlertDialogHeader>
-        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+        <AlertDialogTitle>Confirm deletion of this user?</AlertDialogTitle>
         <AlertDialogDescription>
-          This will permanently delete this user and their reservation details
-          from database.
+          This will permanently delete this user and their orders from database.
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
         <AlertDialogCancel>Cancel</AlertDialogCancel>
-        <AlertDialogAction className="text-red-500 bg-red-900/20 hover:bg-red-900/30">
-          Delete
+        <AlertDialogAction
+          onClick={() => handleDeleteUser(userId)}
+          className="text-red-500 bg-red-900/20 hover:bg-red-900/30"
+        >
+          {isDeleting && <LoaderLucide className="animate-spin" />}
+          {!isDeleting && <span>Delete</span>}
         </AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialogContent>

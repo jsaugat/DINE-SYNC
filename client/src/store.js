@@ -5,6 +5,7 @@ import selectionReducer from "./slices/reservation/selectionSlice";
 import totalTablesReducer from "./slices/reservation/totalTablesSlice";
 import bookingDetailsReducer from "./slices/reservation/bookingDetailsSlice";
 import ordersReducer from "./slices/reservation/ordersSlice";
+import usersReducer from "./slices/usersSlice";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     totalTables: totalTablesReducer,
     selection: selectionReducer,
     orders: ordersReducer,
+    users: usersReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(apiSlice.middleware), // uses the default middleware provided by Redux Toolkit for store.

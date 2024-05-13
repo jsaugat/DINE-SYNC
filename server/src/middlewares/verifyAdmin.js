@@ -4,6 +4,7 @@ export const verifyAdmin = (req, res, next) => {
 
   if (isAdmin) {
     // User is an admin, proceed to the next middleware or controller function
+    console.log("Admin Verified ✅");
     return next();
   } else {
     // User is not an admin, return unauthorized error

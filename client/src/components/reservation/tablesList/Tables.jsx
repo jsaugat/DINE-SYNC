@@ -74,7 +74,7 @@ export default function Tables({ search, getFormattedDateTime }) {
           if (allTablesReserved) {
             toast({
               variant: "destructive",
-              title: "All tables are reserved for this date and time.",
+              title: "All tables are reserved for this date, time and size.",
               description: "Please choose another day or time.",
             });
           }

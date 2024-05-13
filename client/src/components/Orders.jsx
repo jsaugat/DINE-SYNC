@@ -72,10 +72,12 @@ export default function Orders() {
       <main className="min-h-[40rem] h-full flex flex-col items-start gap-3 text-[0.9rem]">
         <h3 className="text-3xl my-6 mb-4 text-white">Order History</h3>
         {isLoading ? (
-          <div className="flex items-center gap-2 opacity-60">
-            <Loader className="animate-spin size-5" />
-            Fetching Orders
-          </div>
+          <section className="h-20 w-full border bg-muted/30 rounded-md flex items-center justify-center">
+            <div className="flex items-center gap-2 opacity-60">
+              <Loader className="animate-spin size-5" />
+              Fetching Orders
+            </div>
+          </section>
         ) : error ? (
           <div>Error: {error.message}</div>
         ) : theOrders.length > 0 ? (

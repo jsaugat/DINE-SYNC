@@ -12,7 +12,7 @@ const router = express.Router();
 // GET ALL
 router.get("/", verifyAdmin, getUsers);
 // DELETE
-router.delete("/:id", verifyAdmin, deleteUser);
+router.delete("/:userId", verifyAdmin, deleteUser);
 // GET
 // router.get("/:id", verifyUser, getUser);
 // UPDATE
