@@ -106,6 +106,7 @@ export default function ManageUsers({ contentWidth }) {
                 email={user.email}
                 userId={user._id}
                 registeredOn={user.createdAt}
+                noOfReservations={user.reservations.length}
                 handleDeleteUser={handleDeleteUser}
                 isDeleting={isDeleting}
               />
@@ -122,6 +123,7 @@ const UserCard = ({
   email,
   userId,
   registeredOn,
+  noOfReservations,
   handleDeleteUser,
   isDeleting,
 }) => (
@@ -133,10 +135,20 @@ const UserCard = ({
       </div>
     </section>
     <section className="flex-1 text-left">
-      <span className="text-sm flex items-center gap-2">
-        <div className="size-2 rounded-full bg-green-500" /> 2 current
-        reservations
-      </span>
+      <div className="text-sm w-fit py-1 px-2 border rounded-full flex items-center gap-2">
+        <div
+          className={`size-2 rounded-full ${
+            noOfReservations > 0 ? "bg-green-500" : "bg-neutral-500"
+          }`}
+        />
+        <span
+          className={`${
+            noOfReservations <= 0 && "text-muted-foreground"
+          }`}
+        >
+          {noOfReservations > 0 ? noOfReservations : "No"} current reservations
+        </span>
+      </div>
       <span className="text-muted-foreground text-xs">
         registered on{" "}
         {new Date(registeredOn).toLocaleDateString("en-US", {

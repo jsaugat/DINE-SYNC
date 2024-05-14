@@ -18,6 +18,7 @@ const authUser = asyncHandler(async (req, res, next) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      reservations: user.reservations,
       token,
     });
   } else {
@@ -49,6 +50,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      reservations: user.reservations,
       token,
     });
   } else {

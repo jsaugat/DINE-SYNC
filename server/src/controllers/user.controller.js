@@ -51,18 +51,31 @@ const deleteUser = async (req, res, next) => {
 
       // Update the associated tables' isAvailable property to true
       const reservations = await Reservation.find({ userId: deletedUser._id });
-      for (const reservation of reservations) {
-        const day = await Day.findOne({ date: reservation.date });
-        if (day) {
-          const table = day.tables.find(
-            (table) => table._id.toString() === reservation.table.toString()
+      const dayIds = reservations.map((reservation) => reservation.date);
+      const days = await Day.find({ date: { $in: dayIds } });
+
+      const bulkUpdateOperations = days.map((day) => {
+        const updatedTables = day.tables.map((table) => {
+          const reservationForTable = reservations.find(
+            (reservation) =>
+              reservation.table.toString() === table._id.toString()
           );
-          if (table) {
-            // Set the isAvailable property of the table to true
-            table.isAvailable = true;
+          if (reservationForTable) {
+            return { ...table._doc, isAvailable: true };
           }
-          await day.save();
-        }
+          return table;
+        });
+
+        return {
+          updateOne: {
+            filter: { _id: day._id },
+            update: { $set: { tables: updatedTables } },
+          },
+        };
+      });
+
+      if (bulkUpdateOperations.length > 0) {
+        await Day.bulkWrite(bulkUpdateOperations);
       }
 
       res
@@ -76,6 +89,8 @@ const deleteUser = async (req, res, next) => {
     next(error);
   }
 };
+
+// CLAUDE AI
 // const deleteUser = async (req, res, next) => {
 //   try {
 //     const deletedUser = await User.findByIdAndDelete(req.params.userId);
@@ -87,18 +102,31 @@ const deleteUser = async (req, res, next) => {
 
 //       // Update the associated tables' isAvailable property to true
 //       const reservations = await Reservation.find({ userId: deletedUser._id });
-//       for (const reservation of reservations) {
-//         const day = await Day.findOne({ date: reservation.date });
-//         if (day) {
-//           const table = day.tables.find(
-//             (table) => table._id.toString() === reservation.table.toString()
+//       const dayIds = reservations.map((reservation) => reservation.date);
+//       const days = await Day.find({ date: { $in: dayIds } });
+
+//       const bulkUpdateOperations = days.map((day) => {
+//         const updatedTables = day.tables.map((table) => {
+//           const reservationForTable = reservations.find(
+//             (reservation) =>
+//               reservation.table.toString() === table._id.toString()
 //           );
-//           if (table) {
-//             // Set the isAvailable property of the table to true
-//             table.isAvailable = true;
+//           if (reservationForTable) {
+//             return { ...table._doc, isAvailable: true };
 //           }
-//           await day.save();
-//         }
+//           return table;
+//         });
+
+//         return {
+//           updateOne: {
+//             filter: { _id: day._id },
+//             update: { $set: { tables: updatedTables } },
+//           },
+//         };
+//       });
+
+//       if (bulkUpdateOperations.length > 0) {
+//         await Day.bulkWrite(bulkUpdateOperations);
 //       }
 
 //       res
