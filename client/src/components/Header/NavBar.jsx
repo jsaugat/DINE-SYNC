@@ -61,27 +61,31 @@ const NavBar = () => {
             The Menu
           </NavLink>
         </li> */}
-        <li>
-          <NavLink
-            to="booking"
-            className={({ isActive }) =>
-              isActive ? "text-white" : "text-neutral-400"
-            }
-          >
-            Reservation
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="profile/orders"
-            onClick={handleOrdersNavigation}
-            className={({ isActive }) =>
-              isActive ? "text-white" : "text-neutral-400"
-            }
-          >
-            My Orders
-          </NavLink>
-        </li>
+        {!userInfo?.isAdmin && (
+          <>
+            <li>
+              <NavLink
+                to="booking"
+                className={({ isActive }) =>
+                  isActive ? "text-white" : "text-neutral-400"
+                }
+              >
+                Reservation
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="profile/orders"
+                onClick={handleOrdersNavigation}
+                className={({ isActive }) =>
+                  isActive ? "text-white" : "text-neutral-400"
+                }
+              >
+                My Orders
+              </NavLink>
+            </li>
+          </>
+        )}
         {userInfo?.isAdmin && (
           <li>
             <NavLink
