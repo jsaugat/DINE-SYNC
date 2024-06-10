@@ -4,7 +4,10 @@ export const tableSchema = new mongoose.Schema(
   {
     number: Number,
     capacity: Number,
-    isAvailable: Boolean,
+    status: {
+      type: String,
+      enum: ["available", "reserved", "pending"],
+    },
     reservation: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Reservation",

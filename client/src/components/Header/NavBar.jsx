@@ -89,7 +89,7 @@ const NavBar = () => {
         {userInfo?.isAdmin && (
           <li>
             <NavLink
-              to="admin/users"
+              to="admin/orders"
               className={({ isActive }) =>
                 isActive ? "text-white" : "text-neutral-400"
               }

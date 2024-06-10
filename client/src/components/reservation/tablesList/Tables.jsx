@@ -113,9 +113,8 @@ export default function Tables({ search, getFormattedDateTime }) {
               totalTables.map((table) => (
                 <TableRow
                   key={table.number}
-                  className={`cursor-pointer ${
-                    table.isAvailable ? "" : "text-neutral-500 hover:bg-black"
-                  }`}
+                  className={`cursor-pointer ${table.isAvailable ? "" : "text-neutral-500 hover:bg-black"
+                    }`}
                   onClick={() => {
                     if (!table.isAvailable) {
                       toast({

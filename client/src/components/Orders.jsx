@@ -68,7 +68,7 @@ export default function Orders() {
   };
 
   return (
-    <div className="w-1/3">
+    <div className="w-1/2">
       <main className="min-h-[40rem] h-full flex flex-col items-start gap-3 text-[0.9rem]">
         <h3 className="text-3xl my-6 mb-4 text-white">Order History</h3>
         {isLoading ? (
@@ -87,13 +87,13 @@ export default function Orders() {
               className="relative px-4 py-6 pb-12 min-w-fit bg-gradient-to-br from-cardBlack/20 via-cardBlack/20 to-cardBlack/20 border rounded-3xl backdrop-blur-md"
             >
               <div className="grid grid-cols-5 gap-x-1 text-center">
-                <div className=" text-googleBlue">Table ID</div>
-                <div className=" text-googleBlue">Table Size</div>
-                <div className=" text-googleBlue">Date</div>
-                <div className=" text-googleBlue">Time</div>
-                <div className=" text-googleBlue">Duration</div>
+                <div className="text-left text-googleBlue">Table ID</div>
+                <div className="text-left text-googleBlue">Table Size</div>
+                <div className="text-left text-googleBlue">Date</div>
+                <div className="text-left text-googleBlue">Time</div>
+                <div className="text-left text-googleBlue">Duration</div>
 
-                <div className="py-2 px-1 text-2xl flex items-start justify-center">
+                <div className="py-2 px-1 text-left text-2xl flex items-start justify-start">
                   {/* <RoundedNeutralDiv> */}
                   <div className="flex items-center gap-2">
                     <div className="size-2 bg-green-500 rounded-full"></div>
@@ -101,22 +101,22 @@ export default function Orders() {
                   </div>
                   {/* </RoundedNeutralDiv> */}
                 </div>
-                <div className="py-2 px-1">
+                <div className="py-2 px-1 text-left">
                   <RoundedNeutralDiv>
                     0{order.bookingDetails.tableCapacity}
                   </RoundedNeutralDiv>
                 </div>
-                <div className="py-2 px-1">
+                <div className="py-2 px-1 text-left">
                   <RoundedNeutralDiv>
                     {ISOToReadableDate(order.date, "date")}
                   </RoundedNeutralDiv>
                 </div>
-                <div className="py-2 px-1">
+                <div className="py-2 px-1 text-left">
                   <RoundedNeutralDiv>
                     {ISOToReadableDate(order.date, "time")}
                   </RoundedNeutralDiv>
                 </div>
-                <div className="py-2 px-1">
+                <div className="py-2 px-1 text-left">
                   <RoundedNeutralDiv>1 hr</RoundedNeutralDiv>
                 </div>
               </div>
