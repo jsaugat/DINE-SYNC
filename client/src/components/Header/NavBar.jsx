@@ -26,7 +26,7 @@ const NavBar = () => {
   };
 
   return (
-    <nav className="fixed z-[1000] w-full top-0 nav-menu flex px-[5rem] justify-between items-center py-[.6rem] border-b border-white/10 bg-gradient-to-r from-black/40 to-transparent backdrop-blur-sm">
+    <nav className="fixed z-[1000] w-full left-0 top-0 nav-menu flex px-[5rem] justify-between items-center py-[.6rem] border-b border-white/10 bg-gradient-to-r from-black/40 to-transparent backdrop-blur-sm">
       {/* logo */}
       <Logo />
       {/* menu */}

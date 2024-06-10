@@ -3,7 +3,6 @@ import React from "react";
 import { CircleAlert } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import styles from "./style.module.scss";
 import {
   Table,
   TableBody,
@@ -13,9 +12,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/shadcn/ui/table"
+import Indicator from "@/components/Indicator/index.jsx";
 
 const OrdersTable = () => {
-  const isAvailable = false;
   return (
     <Table>
       <TableCaption>A list of recent orders</TableCaption>
@@ -34,21 +33,7 @@ const OrdersTable = () => {
           <TableCell className="font-medium text-left">Saugat Joshi</TableCell>
           <TableCell className="text-left">20 May 2020</TableCell>
           <TableCell className="text-left">
-            {isAvailable ? (
-              <div
-                className={`${styles.available} ${styles.statusIndicator}`}
-              >
-                <span class="rounded-full size-2 bg-green-500 shadow-md shadow-black"></span>{" "}
-                AVAILABLE
-              </div>
-            ) : (
-              <div
-                className={`${styles.booked} ${styles.statusIndicator}`}
-              >
-                <span class="rounded-full size-2 bg-red-600 shadow-sm shadow-black"></span>{" "}
-                BOOKED
-              </div>
-            )}
+            <Indicator status="available" />
           </TableCell>
           <TableCell className="text-right">$ 250.00</TableCell>
         </TableRow>

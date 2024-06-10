@@ -4,7 +4,7 @@ import "./Styles/animation.scss";
 import { Footer, NavBar, PointerBall } from "./master";
 import { Outlet } from "react-router-dom";
 import { Toaster } from "@/shadcn/ui/toaster";
-import "@/Styles/App.scss";
+import "./App.css";
 // import { GeistSans } from 'geist/font/sans';
 // import { GeistMono } from 'geist/font/mono';
 

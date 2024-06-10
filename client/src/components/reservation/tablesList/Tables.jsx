@@ -21,6 +21,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useToast } from "@/shadcn/ui/use-toast";
 import { CircleAlert, MoveLeft, CheckCheck } from "lucide-react";
 import { Link } from "react-router-dom";
+import Indicator from "@/components/Indicator";
 
 export default function Tables({ search, getFormattedDateTime }) {
   // selected details
@@ -68,7 +69,7 @@ export default function Tables({ search, getFormattedDateTime }) {
 
           //? Check if all tables are reserved
           const allTablesReserved = filteredTables.every(
-            (table) => !table.isAvailable
+            (table) => table.status === "reserved"
           );
           //! If all tables are reserved
           if (allTablesReserved) {
@@ -129,21 +130,7 @@ export default function Tables({ search, getFormattedDateTime }) {
                 >
                   {/* Table Status Cell */}
                   <TableCell className="text-center">
-                    {table.isAvailable ? (
-                      <div
-                        className={`${styles.available} ${styles.statusIndicator}`}
-                      >
-                        <span class="rounded-full size-2 bg-green-500 shadow-md shadow-black"></span>{" "}
-                        AVAILABLE
-                      </div>
-                    ) : (
-                      <div
-                        className={`${styles.booked} ${styles.statusIndicator}`}
-                      >
-                        <span class="rounded-full size-2 bg-red-600 shadow-sm shadow-black"></span>{" "}
-                        BOOKED
-                      </div>
-                    )}
+                    <Indicator status="available" />
                   </TableCell>
                   {/* Table Number Cell */}
                   <TableCell className="font-medium text-center">

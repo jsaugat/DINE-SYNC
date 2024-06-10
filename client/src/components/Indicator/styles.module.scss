@@ -1,0 +1,12 @@
+.booked {
+  background: rgba(128, 62, 0, 0.557);
+}
+.available {
+  background: rgba(0, 128, 92, 0.42);
+}
+.pending {
+  background: rgba(118, 118, 118, 0.42);
+}
+.statusIndicator {
+  @apply px-2 py-1 rounded-full text-white text-xs font-medium inline-flex items-center gap-2  backdrop-blur-sm;
+}

@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./Styles/globals.scss";
+import "./styles/globals.scss";
 import {
   App,
   Home,
