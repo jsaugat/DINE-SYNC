@@ -18,7 +18,7 @@ const OrdersTable = () => {
   const isAvailable = false;
   return (
     <Table>
-      <TableCaption>A list of recent orders</TableCaption>
+      {/* <TableCaption>A list of recent orders</TableCaption> */}
       <TableHeader>
         <TableRow>
           <TableHead className="w-[100px]">User</TableHead>
@@ -75,7 +75,9 @@ export default function ManageOrders({ contentWidth }) {
         ) : error ? (
           <div>Error: {error.message}</div>
         ) : orders ? (
-          <OrdersTable />
+          <>
+            <OrdersTable />
+          </>
         ) : (
           <section className="border rounded-lg p-12 text-muted-foreground bg-muted/50 backdrop-blur-[1px] w-full flex flex-col items-center justify-center">
             <div className="flex items-center gap-2 justify-center">
