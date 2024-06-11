@@ -68,7 +68,7 @@ export default function Tables({ search, getFormattedDateTime }) {
 
           //? Check if all tables are reserved
           const allTablesReserved = filteredTables.every(
-            (table) => !table.isAvailable
+            (table) => table.status === "booked"
           );
           //! If all tables are reserved
           if (allTablesReserved) {
@@ -113,10 +113,10 @@ export default function Tables({ search, getFormattedDateTime }) {
               totalTables.map((table) => (
                 <TableRow
                   key={table.number}
-                  className={`cursor-pointer ${table.isAvailable ? "" : "text-neutral-500 hover:bg-black"
+                  className={`cursor-pointer ${table.status === "available" ? "" : "text-neutral-500 hover:bg-black"
                     }`}
                   onClick={() => {
-                    if (!table.isAvailable) {
+                    if (table.status !== "available") {
                       toast({
                         variant: "destructive",
                         title: "Please select an available table!!",
@@ -129,7 +129,7 @@ export default function Tables({ search, getFormattedDateTime }) {
                 >
                   {/* Table Status Cell */}
                   <TableCell className="text-center">
-                    {table.isAvailable ? (
+                    {table.status === "available" ? (
                       <div
                         className={`${styles.available} ${styles.statusIndicator}`}
                       >

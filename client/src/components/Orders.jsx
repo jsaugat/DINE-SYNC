@@ -144,7 +144,7 @@ export default function Orders() {
               {/* Delete an Order */}
               <DeleteAlertDialog
                 orderId={order._id}
-                handleCancelOrder={handleCancelOrder}
+                handleCancelOrder={() => handleCancelOrder(order._id)}
                 isDeleting={isDeleting}
                 trigger={
                   <Button className="absolute right-4 bottom-5 rounded-full text-red-500 bg-red-900/20 hover:bg-red-900/30">

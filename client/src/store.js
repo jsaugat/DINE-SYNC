@@ -5,6 +5,7 @@ import selectionReducer from "./slices/reservation/selectionSlice";
 import totalTablesReducer from "./slices/reservation/totalTablesSlice";
 import bookingDetailsReducer from "./slices/reservation/bookingDetailsSlice";
 import ordersReducer from "./slices/reservation/ordersSlice";
+import allOrdersReducer from "./slices/reservation/allOrdersSlice";
 import usersReducer from "./slices/usersSlice";
 
 const store = configureStore({
@@ -15,6 +16,7 @@ const store = configureStore({
     totalTables: totalTablesReducer,
     selection: selectionReducer,
     orders: ordersReducer,
+    allOrders: allOrdersReducer,
     users: usersReducer,
   },
   middleware: (getDefaultMiddleware) =>

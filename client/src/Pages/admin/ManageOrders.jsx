@@ -1,8 +1,8 @@
 import { Container } from "@/master";
-import React from "react";
+import React, { useEffect } from "react";
 import { CircleAlert } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styles from "./style.module.scss";
 import {
   Table,
@@ -13,54 +13,68 @@ import {
   TableHeader,
   TableRow,
 } from "@/shadcn/ui/table"
+import { useDeleteOrderByIdMutation, useGetAllOrdersQuery } from "@/slices/api/reservationApiSlice";
+import { deleteAdOrder, setAdOrders } from "@/slices/reservation/allOrdersSlice";
+import { Loader, Trash2 } from "lucide-react"
+import { Button } from "@/shadcn/ui/button";
 
-const OrdersTable = () => {
-  const isAvailable = false;
+const OrdersTable = ({ allOrders }) => {
+  const [deleteOrder, { isLoading: isDeleting }] = useDeleteOrderByIdMutation();
+  const handleDeleteOrder = async (orderId) => {
+    await deleteOrder(orderId).unwrap();
+    dispatch = (deleteAdOrder(orderId))
+  }
+
   return (
     <Table>
       {/* <TableCaption>A list of recent orders</TableCaption> */}
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">User</TableHead>
           <TableHead className="w-[100px]">Booking Name</TableHead>
           <TableHead className="text-left">Date</TableHead>
-          <TableHead className="text-left">Status</TableHead>
-          <TableHead className="text-right">Amount</TableHead>
+          <TableHead className="text-left">Contact</TableHead>
+          <TableHead className="text-left">Edit</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        <TableRow>
-          <TableCell className="font-medium text-left">Saugat Joshi</TableCell>
-          <TableCell className="font-medium text-left">Saugat Joshi</TableCell>
-          <TableCell className="text-left">20 May 2020</TableCell>
-          <TableCell className="text-left">
-            {isAvailable ? (
-              <div
-                className={`${styles.available} ${styles.statusIndicator}`}
-              >
-                <span class="rounded-full size-2 bg-green-500 shadow-md shadow-black"></span>{" "}
-                AVAILABLE
-              </div>
-            ) : (
-              <div
-                className={`${styles.booked} ${styles.statusIndicator}`}
-              >
-                <span class="rounded-full size-2 bg-red-600 shadow-sm shadow-black"></span>{" "}
-                BOOKED
-              </div>
-            )}
-          </TableCell>
-          <TableCell className="text-right">$ 250.00</TableCell>
-        </TableRow>
+        {allOrders.map((order) => (
+          <TableRow key={order._id}>
+            <TableCell className="font-medium text-left">{order.bookingDetails ? order.bookingDetails.name : "N/A"}</TableCell>
+            <TableCell className="text-left">{new Date(order.date).toLocaleDateString()}</TableCell>
+            <TableCell className="text-left">{order.bookingDetails ? `${order.bookingDetails.phone}` : "N/A"}</TableCell>
+            <TableCell className="text-left">
+              <Button size="icon" variant="outline" onClick={() => handleDeleteOrder(order._id)}>
+                {isDeleting ? <Loader className="size-4 animate-spin" /> : <Trash2 className="size-4" />}
+              </Button>
+            </TableCell>
+          </TableRow>
+        ))}
       </TableBody>
     </Table>
   )
 }
 
 export default function ManageOrders({ contentWidth }) {
-  const orders = useSelector((state) => state.orders);
-  const isLoading = false;
-  const error = false;
+  const allOrders = useSelector((state) => state.allOrders);
+  const {
+    data: fetchedAllOrders,
+    isLoading,
+    error,
+    refetch,
+  } = useGetAllOrdersQuery();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    refetch();
+    console.log("***** MANAGE ORDERS_PAGE *****");
+    console.log("My Orders: ", allOrders);
+
+    if (fetchedAllOrders) {
+      dispatch(setAdOrders(fetchedAllOrders));
+    }
+    console.log("THE_ORDERS: ", allOrders);
+  }, [dispatch, allOrders]);
+
   return (
     <div className="w-[700px]">
       <main className="min-h-[40rem] h-full flex flex-col items-start gap-3 text-[0.9rem]">
@@ -68,26 +82,26 @@ export default function ManageOrders({ contentWidth }) {
           Manage Orders
         </h3>
         {isLoading ? (
-          <div className="flex items-center gap-2 opacity-60">
-            <Loader className="animate-spin size-5" />
-            Fetching Orders
-          </div>
+          <section className="h-20 w-full border bg-muted/30 rounded-md flex items-center justify-center">
+            <div className="flex items-center gap-2 opacity-60">
+              <Loader className="animate-spin size-5" />
+              Fetching All Orders
+            </div>
+          </section>
         ) : error ? (
           <div>Error: {error.message}</div>
-        ) : orders ? (
-          <>
-            <OrdersTable />
-          </>
-        ) : (
-          <section className="border rounded-lg p-12 text-muted-foreground bg-muted/50 backdrop-blur-[1px] w-full flex flex-col items-center justify-center">
-            <div className="flex items-center gap-2 justify-center">
-              <CircleAlert
-                strokeWidth={"1.5px"}
-                className="text-muted-foreground size-5"
-              />{" "}
-              <div>Zero reservation orders right now</div>
-            </div>
-            {/* <Link
+        ) : allOrders ?
+          <OrdersTable allOrders={allOrders} />
+          : (
+            <section className="border rounded-lg p-12 text-muted-foreground bg-muted/50 backdrop-blur-[1px] w-full flex flex-col items-center justify-center">
+              <div className="flex items-center gap-2 justify-center">
+                <CircleAlert
+                  strokeWidth={"1.5px"}
+                  className="text-muted-foreground size-5"
+                />{" "}
+                <div>Zero reservation orders right now</div>
+              </div>
+              {/* <Link
               to="/booking"
               className="group underline text-googleBlue flex items-center gap-2"
             >
@@ -97,8 +111,8 @@ export default function ManageOrders({ contentWidth }) {
                 strokeWidth={"1.5px"}
               />
             </Link> */}
-          </section>
-        )}
+            </section>
+          )}
       </main>
     </div>
   );
