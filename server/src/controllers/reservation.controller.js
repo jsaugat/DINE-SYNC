@@ -125,7 +125,7 @@ const getMyOrders = async (req, res, next) => {
       .sort({ createdAt: -1 })
       .exec();
     res.status(200).json(reservations);
-    console.log(reservations);
+    console.log("my orders: ", reservations);
   } catch (err) {
     next(err);
   }
@@ -181,7 +181,7 @@ const deleteOrder = async (req, res, next) => {
 
 // admin controllers
 const getOrders = async (req, res, next) => {
-  
+
 }
 
 const updateStatus = async (req, res, next) => {

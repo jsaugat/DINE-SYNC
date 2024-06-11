@@ -7,13 +7,13 @@ const ordersSlice = createSlice({
   initialState,
   reducers: {
     setOrders: (state, action) => {
-      state = action.payload;
+      return action.payload;
     },
     deleteOrder: (state, action) => {
-      state = state.filter((order) => order._id !== action.payload);
+      return state.filter((order) => order._id !== action.payload);
     },
     addOrder: (state, action) => {
-      return state.push(action.payload);
+      state.push(action.payload);
     }
   },
 });
