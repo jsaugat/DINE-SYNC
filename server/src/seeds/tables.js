@@ -5,21 +5,21 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const tablesData = [
-  { number: 1, capacity: 4, isAvailable: true },
-  { number: 2, capacity: 4, isAvailable: true },
-  { number: 3, capacity: 4, isAvailable: true },
+  { number: 1, capacity: 4, status: "available" },
+  { number: 2, capacity: 4, status: "available" },
+  { number: 3, capacity: 4, status: "available" },
 
-  { number: 4, capacity: 2, isAvailable: true },
-  { number: 5, capacity: 2, isAvailable: true },
-  { number: 6, capacity: 2, isAvailable: true },
-  { number: 7, capacity: 2, isAvailable: true },
+  { number: 4, capacity: 2, status: "available" },
+  { number: 5, capacity: 2, status: "available" },
+  { number: 6, capacity: 2, status: "available" },
+  { number: 7, capacity: 2, status: "available" },
 
-  { number: 8, capacity: 6, isAvailable: true },
-  { number: 9, capacity: 6, isAvailable: true },
+  { number: 8, capacity: 6, status: "available" },
+  { number: 9, capacity: 6, status: "available" },
 
-  { number: 10, capacity: 8, isAvailable: true },
-  { number: 11, capacity: 8, isAvailable: true },
-  { number: 12, capacity: 8, isAvailable: true },
+  { number: 10, capacity: 8, status: "available" },
+  { number: 11, capacity: 8, status: "available" },
+  { number: 12, capacity: 8, status: "available" },
 ];
 
 //? Function to seed tables with a Tables Data

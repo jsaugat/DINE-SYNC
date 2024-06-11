@@ -37,7 +37,7 @@ function Logo({ logoStyle, DineSync, className }) {
         <h2
           className={`text-3xl mix-blend-difference font-medium text-transparent bg-clip-text bg-gradient-to-r from-white via-white/80 to-slate-500 font-geistSans tracking-tight ${DineSync}`}
         >
-          Rexervation
+          Reservation
         </h2>
       </div>
     </NavLink>

@@ -2,7 +2,7 @@ import { cn } from '@/shadcn/lib/utils'
 import React from 'react'
 import styles from "./styles.module.scss"
 
-export default function Indicator({ className, status }) {
+export default function Indicator({ className, status = "available" }) {
   return (
     <main className={cn("", className)}>
       {status === "available" ? (

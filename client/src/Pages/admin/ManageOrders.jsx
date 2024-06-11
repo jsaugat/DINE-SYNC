@@ -12,6 +12,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/shadcn/ui/table"
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "@/shadcn/ui/context-menu"
+
 import Indicator from "@/components/Indicator/index.jsx";
 
 const OrdersTable = () => {
@@ -33,12 +40,27 @@ const OrdersTable = () => {
           <TableCell className="font-medium text-left">Saugat Joshi</TableCell>
           <TableCell className="text-left">20 May 2020</TableCell>
           <TableCell className="text-left">
-            <Indicator status="available" />
+            <StatusContext trigger={
+              <Indicator status="" className="cursor-pointer" />
+            } />
           </TableCell>
           <TableCell className="text-right">$ 250.00</TableCell>
         </TableRow>
       </TableBody>
     </Table>
+  )
+}
+
+function StatusContext({ trigger }) {
+  return (
+    <ContextMenu>
+      <ContextMenuTrigger>{trigger}</ContextMenuTrigger>
+      <ContextMenuContent>
+        <ContextMenuItem onClick={() => { alert("Approved") }}>Approve</ContextMenuItem>
+        <ContextMenuItem>Reject</ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenu>
+
   )
 }
 

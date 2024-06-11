@@ -179,6 +179,15 @@ const deleteOrder = async (req, res, next) => {
   }
 };
 
+// admin controllers
+const getOrders = async (req, res, next) => {
+  
+}
+
+const updateStatus = async (req, res, next) => {
+
+}
+
 export default deleteOrder;
 
-export { reserveTable, getMyOrders, deleteOrder };
+export { reserveTable, getMyOrders, deleteOrder, updateStatus };

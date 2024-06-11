@@ -10,6 +10,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/shadcn/ui/alert-dialog";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/shadcn/ui/table"
 import { Button } from "@/shadcn/ui/button";
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -26,6 +35,7 @@ import { toast } from "@/shadcn/ui/use-toast";
 import { LoaderCircle, Loader, MoveRight } from "lucide-react";
 import { CircleAlert } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import Indicator from "./Indicator";
 
 export default function Orders() {
   const { _id: userId } = useSelector((state) => state.auth.userInfo);
@@ -84,42 +94,53 @@ export default function Orders() {
           theOrders.map((order, idx) => (
             <figure
               key={order._id}
-              className="relative px-4 py-6 pb-12 min-w-fit bg-gradient-to-br from-cardBlack/20 via-cardBlack/20 to-cardBlack/20 border rounded-3xl backdrop-blur-md"
+              className="relative px-4 py-4 bg-gradient-to-br from-cardBlack/20 via-cardBlack/20 to-cardBlack/20 border rounded-3xl backdrop-blur-md"
             >
-              <div className="grid grid-cols-5 gap-x-1 text-center">
-                <div className="text-left text-googleBlue">Table ID</div>
-                <div className="text-left text-googleBlue">Table Size</div>
-                <div className="text-left text-googleBlue">Date</div>
-                <div className="text-left text-googleBlue">Time</div>
-                <div className="text-left text-googleBlue">Duration</div>
+              <Table>
+                {/* <TableCaption>A list of table bookings.</TableCaption> */}
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="text-left text-googleBlue">Table ID</TableHead>
+                    <TableHead className="text-left text-googleBlue">Table Size</TableHead>
+                    <TableHead className="text-left text-googleBlue">Status</TableHead>
+                    <TableHead className="text-left text-googleBlue">Date</TableHead>
+                    <TableHead className="text-left text-googleBlue">Time</TableHead>
+                    <TableHead className="text-left text-googleBlue">Duration</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow>
+                    <TableCell className="w-20 text-left text-2xl flex items-start justify-start">
+                      <div className="flex items-center gap-2">
+                        <div className="size-2 bg-green-500 rounded-full"></div>
+                        T-{order.bookingDetails.tableNumber}
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-left">
+                      <RoundedNeutralDiv>
+                        0{order.bookingDetails.tableCapacity}
+                      </RoundedNeutralDiv>
+                    </TableCell>
+                    <TableCell className="flex">
+                      <Indicator status={order.status} />
+                    </TableCell>
+                    <TableCell className="text-left">
+                      <RoundedNeutralDiv>
+                        {ISOToReadableDate(order.date, "date")}
+                      </RoundedNeutralDiv>
+                    </TableCell>
+                    <TableCell className="text-left">
+                      <RoundedNeutralDiv>
+                        {ISOToReadableDate(order.date, "time")}
+                      </RoundedNeutralDiv>
+                    </TableCell>
+                    <TableCell className="text-left">
+                      <RoundedNeutralDiv>1 hr</RoundedNeutralDiv>
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
 
-                <div className="py-2 px-1 text-left text-2xl flex items-start justify-start">
-                  {/* <RoundedNeutralDiv> */}
-                  <div className="flex items-center gap-2">
-                    <div className="size-2 bg-green-500 rounded-full"></div>
-                    T-{order.bookingDetails.tableNumber}
-                  </div>
-                  {/* </RoundedNeutralDiv> */}
-                </div>
-                <div className="py-2 px-1 text-left">
-                  <RoundedNeutralDiv>
-                    0{order.bookingDetails.tableCapacity}
-                  </RoundedNeutralDiv>
-                </div>
-                <div className="py-2 px-1 text-left">
-                  <RoundedNeutralDiv>
-                    {ISOToReadableDate(order.date, "date")}
-                  </RoundedNeutralDiv>
-                </div>
-                <div className="py-2 px-1 text-left">
-                  <RoundedNeutralDiv>
-                    {ISOToReadableDate(order.date, "time")}
-                  </RoundedNeutralDiv>
-                </div>
-                <div className="py-2 px-1 text-left">
-                  <RoundedNeutralDiv>1 hr</RoundedNeutralDiv>
-                </div>
-              </div>
 
               <section className="flex gap-4 my-4">
                 <h4 className="text-googleBlue ml-2">Booking Details</h4>

@@ -33,7 +33,7 @@ function HomePage() {
             </span>
           </div>
           {/* Hero Image z-none */}
-          <figure className="bg-hero-image z-50 h-[25rem] w-[37.5rem] mt-44 mb-16 bg-cover bg-left"></figure>
+          <figure className="bg-hero-image z-50 h-[25rem] w-[37.5rem] mt-44 mb-16 bg-cover bg-left rounded-3xl border"></figure>
           <div className="flex flex-col gap-16">
             <p className="text-[1.2rem] max-w-[47.8rem text-left font-montreal mt-20">
               Reserve your table for an exquisite dining experience and
